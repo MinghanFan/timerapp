@@ -57,7 +57,7 @@ export const pauseTimer = (setIsRunning, intervalId) => {
 export const exitTimer = (setIsRunning, setTimeRemaining, setIntervalId, intervalId) => {
   clearInterval(intervalId);
   setIsRunning(false);
-  setTimeRemaining(20 * 60);  
+  setTimeRemaining(10);  
 };
 
 export const formatTime = (time) => {
@@ -66,18 +66,3 @@ export const formatTime = (time) => {
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
 
-export const testNotification = async (initializeNotifications) => {
-  if (typeof window !== "undefined") {
-    sendWebNotification("Test notification from web");
-  }
-
-  if (await initializeNotifications()) {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Test Notification",
-        body: "This is a test notification",
-      },
-      trigger: null,  
-    });
-  }
-};

@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import { 
   initializeNotifications, 
   sendWebNotification, 
   startTimer, 
   pauseTimer, 
   exitTimer, 
-  formatTime, 
-  testNotification 
+  formatTime 
 } from './timer.js';
 
 export default function App() {
-  const [timeRemaining, setTimeRemaining] = useState(20 * 60); 
+  const [timeRemaining, setTimeRemaining] = useState(10); 
   const [isRunning, setIsRunning] = useState(false);  
   const [intervalId, setIntervalId] = useState(null); 
   const [hasPermission, setHasPermission] = useState(false);  
+  const [notificationSent, setNotificationSent] = useState(false); 
 
   useEffect(() => {
     initializeNotifications().then(granted => {
@@ -24,6 +25,33 @@ export default function App() {
 
     return () => clearInterval(intervalId); 
   }, [intervalId]);
+
+  useEffect(() => {
+    if (timeRemaining === 0 && !notificationSent) {
+      if (typeof window !== "undefined") {
+        sendWebNotification("10s");
+
+        setTimeout(() => {
+          sendWebNotification("10s after");
+        }, 10000); 
+      }
+
+      setNotificationSent(true);
+
+      clearInterval(intervalId);
+      setIsRunning(false);
+
+      setTimeout(() => {
+        setTimeRemaining(10);
+        setNotificationSent(false); 
+      }, 1000); 
+    }
+  }, [timeRemaining, notificationSent, intervalId]);
+
+  const handleStart = () => {
+    setNotificationSent(false);
+    startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning);
+  };
 
   return (
     <View style={styles.container}>
@@ -36,7 +64,7 @@ export default function App() {
       
       <View style={styles.buttonContainer}>
         <Button 
-          onPress={() => startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning)} 
+          onPress={handleStart} 
           title="Start" 
         />
         <Button 
@@ -47,11 +75,6 @@ export default function App() {
           onPress={() => exitTimer(setIsRunning, setTimeRemaining, setIntervalId, intervalId)} 
           title="Exit" 
           color="red" 
-        />
-        <Button 
-          onPress={() => testNotification(initializeNotifications)} 
-          title="Test Notification" 
-          color="green" 
         />
       </View>
 
