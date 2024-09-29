@@ -76,6 +76,12 @@ export default function App() {
           title="Exit" 
           color="red" 
         />
+        <Button 
+        onPress={sendWebNotification} 
+        title="Test Notification" 
+        color="green" 
+        />
+
       </View>
 
       <StatusBar style="auto" />
