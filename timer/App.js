@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { 
   initializeNotifications, 
@@ -10,6 +10,7 @@ import {
   exitTimer, 
   formatTime 
 } from './timer.js';
+import styles from './style.js';
 
 export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(10); 
@@ -88,33 +89,3 @@ export default function App() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  timerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  timeDisplay: {
-    fontSize: 48,  
-    fontWeight: 'bold',
-    textAlign: 'center',  
-    marginBottom: 20,
-  },
-  permissionText: {
-    color: 'red',
-    marginTop: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    width: '60%',
-  }
-});
