@@ -1,40 +1,56 @@
 import { StyleSheet } from 'react-native';
 
+// Color variables 
+const colors = {
+  background: '#799191',
+  text: '#000',
+  timerText: '#000',
+  buttonBackground: '#C8D3C4',
+  buttonText: '#fff',
+  errorText: 'red',
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20, // Add padding to the container
+    padding: 20, 
   },
   timerText: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: colors.timerText,
   },
   timeDisplay: {
     fontSize: 48,  
     fontWeight: 'bold',
     textAlign: 'center',  
-    marginBottom: 30, // Increase bottom margin
+    marginBottom: 30,
+    color: colors.text,
   },
   permissionText: {
-    color: 'red',
+    color: colors.errorText,
     marginTop: 10,
-    marginBottom: 20, // Add bottom margin
-    textAlign: 'center', // Center the text
+    marginBottom: 20,
+    textAlign: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-    width: '80%', // Increase width for more spacing
+    width: '80%',
   },
   button: {
-    minWidth: 80, // Set a minimum width for buttons
-    marginHorizontal: 5, // Add horizontal margin between buttons
-  }
+    minWidth: 80,
+    marginHorizontal: 5,
+    backgroundColor: colors.buttonBackground,
+  },
+  buttonText: {
+    color: colors.buttonText,
+  },
 });
 
 export default styles;
