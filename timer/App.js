@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button } from 'react-native';
-import * as Notifications from 'expo-notifications';
-import { 
-  initializeNotifications, 
-  sendWebNotification, 
-  startTimer, 
-  pauseTimer, 
-  exitTimer, 
-  formatTime 
-} from './timer.js';
+import { startTimer, pauseTimer, exitTimer, formatTime } from './timer';
+import { initializeNotifications, sendWebNotification } from './notifications';
 import styles from './style.js';
 
 export default function App() {
@@ -81,12 +74,11 @@ export default function App() {
           style={styles.button}
         />
         <Button 
-        onPress={sendWebNotification} 
-        title="Test Notification" 
-        color="green" 
-        style={styles.button}
+          onPress={() => sendWebNotification("Test notification")} 
+          title="Test Notification" 
+          color="green" 
+          style={styles.button}
         />
-
       </View>
 
       <StatusBar style="auto" />
