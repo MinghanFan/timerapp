@@ -67,20 +67,24 @@ export default function App() {
         <Button 
           onPress={handleStart} 
           title="Start" 
+          style={styles.button}
         />
         <Button 
           onPress={() => pauseTimer(setIsRunning, intervalId)} 
           title="Pause" 
+          style={styles.button}
         />
         <Button 
           onPress={() => exitTimer(setIsRunning, setTimeRemaining, setIntervalId, intervalId)} 
           title="Exit" 
           color="red" 
+          style={styles.button}
         />
         <Button 
         onPress={sendWebNotification} 
         title="Test Notification" 
         color="green" 
+        style={styles.button}
         />
 
       </View>
