@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, TextInput } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timer';
 import { initializeNotifications, sendWebNotification } from './notifications';
 import styles from './style.js';
 
+let duration = 20*60;
+
 export default function App() {
-  const [timeRemaining, setTimeRemaining] = useState(10); 
+  const [timeRemaining, setTimeRemaining] = useState(duration); 
   const [isRunning, setIsRunning] = useState(false);  
   const [intervalId, setIntervalId] = useState(null); 
   const [hasPermission, setHasPermission] = useState(false);  
   const [notificationSent, setNotificationSent] = useState(false); 
+  const [inputDuration, setInputDuration] = useState(''); // State for input
 
   useEffect(() => {
     initializeNotifications().then(granted => {
@@ -23,11 +26,11 @@ export default function App() {
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
       if (typeof window !== "undefined") {
-        sendWebNotification("10s");
+        sendWebNotification(`${duration}s`);
 
         setTimeout(() => {
-          sendWebNotification("10s after");
-        }, 10000); 
+          sendWebNotification("20s after");
+        }, 20000); 
       }
 
       setNotificationSent(true);
@@ -36,7 +39,7 @@ export default function App() {
       setIsRunning(false);
 
       setTimeout(() => {
-        setTimeRemaining(10);
+        setTimeRemaining(duration);
         setNotificationSent(false); 
       }, 1000); 
     }
@@ -45,6 +48,15 @@ export default function App() {
   const handleStart = () => {
     setNotificationSent(false);
     startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning);
+  };
+
+  const handleSetDuration = () => {
+    const newDuration = parseInt(inputDuration, 10);
+    if (!isNaN(newDuration) && newDuration > 0) {
+      timerDuration = newDuration; // Update global duration
+      setTimeRemaining(timerDuration); // Reset time remaining
+      setInputDuration(''); // Clear input after setting duration
+    }
   };
 
   return (
@@ -79,6 +91,18 @@ export default function App() {
           color="green" 
           style={styles.button}
         />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Enter duration in seconds"
+        keyboardType="numeric"
+        value={inputDuration}
+        onChangeText={setInputDuration}
+      />
+      <Button 
+        onPress={handleSetDuration}
+        title="Set Duration"
+      />
       </View>
 
       <StatusBar style="auto" />

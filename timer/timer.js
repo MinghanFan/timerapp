@@ -1,3 +1,4 @@
+let duration = (10)
 // Import the notification-related functions
 import { initializeNotifications } from './notifications';
 
@@ -12,7 +13,7 @@ export const startTimer = async (setHasPermission, setIsRunning, setIntervalId, 
     setIsRunning(true);
     const id = setInterval(() => {
       setTimeRemaining(prevTime => prevTime > 0 ? prevTime - 1 : 0);
-    }, 1000);
+    }, duration*100);
     setIntervalId(id);
   }
 };
@@ -29,7 +30,7 @@ export const pauseTimer = (setIsRunning, intervalId) => {
 export const exitTimer = (setIsRunning, setTimeRemaining, setIntervalId, intervalId) => {
   clearInterval(intervalId);
   setIsRunning(false);
-  setTimeRemaining(10);  // Reset the timer to 10 seconds
+  setTimeRemaining(duration);  // Reset the timer to 10 seconds
 };
 
 // Function to format time in MM:SS format
@@ -38,3 +39,7 @@ export const formatTime = (time) => {
   const seconds = time % 60;
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
+
+export const setTimerLength = (newDuration) => {
+  duration = newDuration;
+}
