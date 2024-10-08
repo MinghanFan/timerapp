@@ -1,14 +1,30 @@
 import { StyleSheet } from 'react-native';
 
-// Color variables 
-const colors = {
-  background: '#799191',
-  text: '#000',
-  timerText: '#000',
-  buttonBackground: '#C8D3C4',
-  buttonText: '#fff',
-  errorText: 'red',
-};
+// Color themes array
+const colorThemes = [
+  {
+    background: '#799191',
+    text: '#000',
+    timerText: '#000',
+    buttonBackground: '#C8D3C4',
+    buttonText: '#fff',
+    errorText: 'red',
+  },
+  {
+    background: '#FFFFFF',
+    text: '#333',
+    timerText: '#333',
+    buttonBackground: '#E0E0E0',
+    buttonText: '#000',
+    errorText: 'darkred',
+  },
+  // Add more themes as needed
+];
+
+// Select the desired theme
+const selectedTheme = colorThemes[0]; // Change the index to switch themes
+
+const colors = selectedTheme;
 
 const styles = StyleSheet.create({
   container: {
