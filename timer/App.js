@@ -61,6 +61,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.titleText}>20/20/20 vision</Text>
       <Text style={styles.timerText}>Time remaining:</Text>
       <Text style={styles.timeDisplay}>{formatTime(timeRemaining)}</Text>
       
@@ -97,8 +98,14 @@ export default function App() {
           color="red" 
           style={styles.button}
         />
-        
+      
+      </View>
 
+      <View style={styles.setterContainer}>
+      <Button 
+        onPress={handleSetDuration}
+        title="Set Duration"
+      />
       <TextInput
         style={styles.input}
         placeholder="Enter duration in seconds"
@@ -106,10 +113,7 @@ export default function App() {
         value={inputDuration}
         onChangeText={setInputDuration}
       />
-      <Button 
-        onPress={handleSetDuration}
-        title="Set Duration"
-      />
+
       </View>
 
       <StatusBar style="auto" />

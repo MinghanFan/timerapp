@@ -86,6 +86,12 @@ const styles2 = StyleSheet.create({
     justifyContent: 'center',
     padding: 20, 
   },
+  titleText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: colors.timerText,
+  },
   timerText: {
     fontSize: 55,
     fontWeight: 'bold',
@@ -118,12 +124,26 @@ const styles2 = StyleSheet.create({
     position: "absolute",
     top: 10,
     left: 10,
-    width: '20%',
+    width: '30%',
   },
   button: {
-    minWidth: 80,
+    minWidth:100,
+    maxWidth:300,
+    minHeight:50,
+    maxHeight:150,
     marginHorizontal: 5,
     backgroundColor: colors.buttonBackground,
+  },
+  setterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    marginHorizontal: 5,
+    width: '35%',
+  },
+  input:{
+    color: colors.text
+
   },
   buttonText: {
     color: colors.buttonText,
