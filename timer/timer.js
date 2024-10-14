@@ -1,9 +1,10 @@
-let duration = (10)
+export const duration = (1200);
+
 // Import the notification-related functions
 import { initializeNotifications } from './notifications';
 
 // Function to start the timer
-export const startTimer = async (setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning) => {
+export const startTimer = async (setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, duration) => {
   // Initialize notifications and set the permission status
   const permissionGranted = await initializeNotifications();
   setHasPermission(permissionGranted);
@@ -13,7 +14,7 @@ export const startTimer = async (setHasPermission, setIsRunning, setIntervalId, 
     setIsRunning(true);
     const id = setInterval(() => {
       setTimeRemaining(prevTime => prevTime > 0 ? prevTime - 1 : 0);
-    }, duration*100);
+    }, 1000); 
     setIntervalId(id);
   }
 };

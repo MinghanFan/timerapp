@@ -5,10 +5,9 @@ import { startTimer, pauseTimer, exitTimer, formatTime } from './timer';
 import { initializeNotifications, sendWebNotification } from './notifications';
 import styles from './style.js';
 
-let duration = 20*60;
 
 export default function App() {
-  const [timeRemaining, setTimeRemaining] = useState(duration); 
+  const [timeRemaining, setTimeRemaining] = useState(1200); 
   const [isRunning, setIsRunning] = useState(false);  
   const [intervalId, setIntervalId] = useState(null); 
   const [hasPermission, setHasPermission] = useState(false);  
