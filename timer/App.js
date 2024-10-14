@@ -67,7 +67,19 @@ export default function App() {
       {!hasPermission && (
         <Text style={styles.permissionText}>Please enable notifications to receive break reminders</Text>
       )}
-      
+      <View style={styles.buttonContainer2}>
+      <Button 
+          onPress={() => sendWebNotification("Test notification")} 
+          title="Test Notification" 
+          color="green" 
+          style={styles.button}
+        />
+        <Button 
+          onPress={() => pauseTimer(setIsRunning, intervalId)} 
+          title="About" 
+          style={styles.button}
+        />
+      </View>
       <View style={styles.buttonContainer}>
         <Button 
           onPress={handleStart} 
@@ -85,12 +97,7 @@ export default function App() {
           color="red" 
           style={styles.button}
         />
-        <Button 
-          onPress={() => sendWebNotification("Test notification")} 
-          title="Test Notification" 
-          color="green" 
-          style={styles.button}
-        />
+        
 
       <TextInput
         style={styles.input}

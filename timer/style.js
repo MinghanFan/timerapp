@@ -18,11 +18,20 @@ const colorThemes = [
     buttonText: '#000',
     errorText: 'darkred',
   },
+  //just adding this manually for mvp given current mvp design
+  {
+    background: '#265266',
+    text: '#fff',
+    timerText: '#fff',
+    buttonBackground: '#E0E0E0',
+    buttonText: '#000',
+    errorText: '#000',
+  }
   // Add more themes as needed
 ];
 
 // Select the desired theme
-const selectedTheme = colorThemes[0]; // Change the index to switch themes
+const selectedTheme = colorThemes[2]; // Change the index to switch themes
 
 const colors = selectedTheme;
 
@@ -69,4 +78,56 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+const styles2 = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20, 
+  },
+  timerText: {
+    fontSize: 55,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: colors.timerText,
+  },
+  timeDisplay: {
+    fontSize: 70,  
+    fontWeight: 'bold',
+    textAlign: 'center',  
+    marginBottom: 30,
+    color: colors.text,
+  },
+  permissionText: {
+    color: colors.errorText,
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    width: '80%',
+  },
+  buttonContainer2: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: "flex-start",
+    position: "absolute",
+    top: 10,
+    left: 10,
+    width: '20%',
+  },
+  button: {
+    minWidth: 80,
+    marginHorizontal: 5,
+    backgroundColor: colors.buttonBackground,
+  },
+  buttonText: {
+    color: colors.buttonText,
+  },
+});
+
+export default styles2;
