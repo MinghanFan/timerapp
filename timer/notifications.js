@@ -36,6 +36,7 @@ export const sendWebNotification = (message) => {
   if (Notification.permission === "granted") {
     new Notification(message);
     duration = 1200;
+    
   } else if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
       if (permission === "granted") {
@@ -44,3 +45,26 @@ export const sendWebNotification = (message) => {
     });
   }
 };
+
+export const sendWebNotificationNoisy = (message) => {
+  // Check if the browser supports notifications
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notifications.");
+    return;
+  }
+
+  // Check if the user has granted permission to display notifications
+  // If permission is granted, create a new notification
+  if (Notification.permission === "granted") {
+    new Notification(message);
+    duration = 1200;
+    const audio = new Audio("harp_lightcurve-[AudioTrimmer.com].mp3");
+    audio.play();
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        new Notification(message);
+      }
+    });
+  }
+}

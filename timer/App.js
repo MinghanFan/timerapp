@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button, TextInput } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timer';
-import { initializeNotifications, sendWebNotification } from './notifications';
+import { initializeNotifications, sendWebNotification, sendWebNotificationNoisy } from './notifications';
 import styles from './style.js';
 
 
@@ -69,8 +69,8 @@ export default function App() {
       )}
       <View style={styles.buttonContainer2}>
       <Button 
-          onPress={() => sendWebNotification("Test notification")} 
-          title="Test Notification" 
+          onPress={() => sendWebNotificationNoisy("Loud notification")} 
+          title="Loud Notification" 
           color="green" 
           style={styles.button}
         />
