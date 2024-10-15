@@ -35,6 +35,7 @@ export const sendWebNotification = (message) => {
   // If permission is granted, create a new notification
   if (Notification.permission === "granted") {
     new Notification(message);
+    duration = 1200;
   } else if (Notification.permission !== "denied") {
     Notification.requestPermission().then(permission => {
       if (permission === "granted") {
