@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button, TextInput } from 'react-native';
-import { startTimer, pauseTimer, exitTimer, formatTime } from './timer';
+import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
 import { initializeNotifications, sendWebNotification, sendWebNotificationNoisy } from './notifications';
 import styles from './style.js';
 
@@ -13,6 +13,8 @@ export default function App() {
   const [hasPermission, setHasPermission] = useState(false);  
   const [notificationSent, setNotificationSent] = useState(false); 
   const [inputDuration, setInputDuration] = useState(''); // State for input
+  const [timerDuration, setTimerDuration] = useState(1200); // State for timer duration
+  const [isPaused, setIsPaused] = useState(false); // State for pause
 
   useEffect(() => {
     initializeNotifications().then(granted => {
@@ -25,7 +27,7 @@ export default function App() {
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
       if (typeof window !== "undefined") {
-        sendWebNotification(`${duration}s`);
+        sendWebNotification(`${timerDuration / 60} minutes completed`);
 
         setTimeout(() => {
           sendWebNotification("20s after");
@@ -38,22 +40,32 @@ export default function App() {
       setIsRunning(false);
 
       setTimeout(() => {
-        setTimeRemaining(duration);
+        setTimeRemaining(timerDuration); 
         setNotificationSent(false); 
       }, 1000); 
     }
-  }, [timeRemaining, notificationSent, intervalId]);
+  }, [timeRemaining, notificationSent, intervalId, timerDuration]);
 
   const handleStart = () => {
     setNotificationSent(false);
-    startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning);
+    if (!isPaused) {
+      startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timerDuration); 
+    } else {
+      startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timeRemaining); 
+    }
+    setIsPaused(false);
+  };
+
+  const handlePause = () => {
+    pauseTimer(setIsRunning, intervalId); 
+    setIsPaused(true); 
   };
 
   const handleSetDuration = () => {
     const newDuration = parseInt(inputDuration, 10);
     if (!isNaN(newDuration) && newDuration > 0) {
-      timerDuration = newDuration; // Update global duration
-      setTimeRemaining(timerDuration); // Reset time remaining
+      setTimerDuration(newDuration); // Update State
+      setTimeRemaining(newDuration); // Reset time remaining
       setInputDuration(''); // Clear input after setting duration
     }
   };
@@ -75,7 +87,7 @@ export default function App() {
           style={styles.button}
         />
         <Button 
-          onPress={() => pauseTimer(setIsRunning, intervalId)} 
+          onPress={handlePause} 
           title="About" 
           style={styles.button}
         />
@@ -87,7 +99,7 @@ export default function App() {
           style={styles.button}
         />
         <Button 
-          onPress={() => pauseTimer(setIsRunning, intervalId)} 
+          onPress={handlePause} 
           title="Pause" 
           style={styles.button}
         />
