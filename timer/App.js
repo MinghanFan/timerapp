@@ -15,6 +15,8 @@ export default function App() {
   const [inputDuration, setInputDuration] = useState(''); // State for input
   const [timerDuration, setTimerDuration] = useState(1200); // State for timer duration
   const [isPaused, setIsPaused] = useState(false); // State for pause
+  const [loudNotificationsEnabled, setLoudNotificationsEnabled] = useState(false); // New state for loud notifications
+
 
   useEffect(() => {
     initializeNotifications().then(granted => {
@@ -26,12 +28,22 @@ export default function App() {
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
-      if (typeof window !== "undefined") {
-        sendWebNotification(`${timerDuration / 60} minutes completed`);
+      if (loudNotificationsEnabled) {
+        if (typeof window !== "undefined") {
+          sendWebNotificationNoisy(`${timerDuration / 60} minutes completed`);
+          
+          setTimeout(() => {
+            sendWebNotificationNoisy("20s after");
+          }, 20000);
+        }
+      } else {
+        if (typeof window !== "undefined") {
+          sendWebNotification(`${timerDuration / 60} minutes completed`);
 
-        setTimeout(() => {
-          sendWebNotification("20s after");
-        }, 20000); 
+          setTimeout(() => {
+            sendWebNotification("20s after");
+          }, 20000);
+        }
       }
 
       setNotificationSent(true);
@@ -70,6 +82,10 @@ export default function App() {
     }
   };
 
+  const toggleLoudNotifications = () => {
+    setLoudNotificationsEnabled(prev => !prev);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>20/20/20 vision</Text>
@@ -81,9 +97,9 @@ export default function App() {
       )}
       <View style={styles.buttonContainer2}>
       <Button 
-          onPress={() => sendWebNotificationNoisy("Loud notification")} 
-          title="Loud Notification" 
-          color="green" 
+          onPress={() => {toggleLoudNotifications()}} 
+          title={loudNotificationsEnabled ? "Disable Loud Notifications" : "Enable Loud Notifications"}
+          color={loudNotificationsEnabled ? "red" : "green"}
           style={styles.button}
         />
         <Button 
