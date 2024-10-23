@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
 import { initializeNotifications, sendWebNotification, sendWebNotificationNoisy } from './notifications';
 import styles from './style.js';
@@ -58,14 +58,21 @@ export default function App() {
     }
   }, [timeRemaining, notificationSent, intervalId, timerDuration]);
 
-  const handleStart = () => {
-    setNotificationSent(false);
-    if (!isPaused) {
-      startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timerDuration); 
+  const handleStartPause = () => {
+    if (isRunning) {
+      // Pause functionality
+      pauseTimer(setIsRunning, intervalId);
+      setIsPaused(true);
     } else {
-      startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timeRemaining); 
+      // Start functionality
+      setNotificationSent(false);
+      if (!isPaused) {
+        startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timerDuration);
+      } else {
+        startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timeRemaining);
+      }
+      setIsPaused(false);
     }
-    setIsPaused(false);
   };
 
   const handlePause = () => {
@@ -87,63 +94,61 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titleText}>20/20/20 vision</Text>
-      <Text style={styles.timerText}>Time remaining:</Text>
-      <Text style={styles.timeDisplay}>{formatTime(timeRemaining)}</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.titleText}>20/20/20 Vision Timer</Text>
       
+      {/* Timer Display */}
+      <View style={styles.timerContainer}>
+        <Text style={styles.timerLabel}>Time Remaining:</Text>
+        <Text style={styles.timeDisplay}>{formatTime(timeRemaining)}</Text>
+      </View>
+      
+      {/* Notification Permission Warning */}
       {!hasPermission && (
         <Text style={styles.permissionText}>Please enable notifications to receive break reminders</Text>
       )}
-      <View style={styles.buttonContainer2}>
-      <Button 
-          onPress={() => {toggleLoudNotifications()}} 
-          title={loudNotificationsEnabled ? "Disable Loud Notifications" : "Enable Loud Notifications"}
-          color={loudNotificationsEnabled ? "red" : "green"}
-          style={styles.button}
-        />
-        <Button 
-          onPress={handlePause} 
-          title="About" 
-          style={styles.button}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button 
-          onPress={handleStart} 
-          title="Start" 
-          style={styles.button}
-        />
-        <Button 
-          onPress={handlePause} 
-          title="Pause" 
-          style={styles.button}
-        />
-        <Button 
-          onPress={() => exitTimer(setIsRunning, setTimeRemaining, setIntervalId, intervalId)} 
-          title="Exit" 
-          color="red" 
-          style={styles.button}
-        />
       
+      {/* Main Control Buttons */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={handleStartPause} style={styles.button}>
+          <Text style={styles.buttonText}>{isRunning ? 'Pause' : 'Start'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => exitTimer(setIsRunning, setTimeRemaining, setIntervalId, intervalId)} style={[styles.button, styles.exitButton]}>
+          <Text style={styles.buttonText}>Reset</Text>
+        </TouchableOpacity>
       </View>
 
+      {/* Timer Duration Setter */}
       <View style={styles.setterContainer}>
-      <Button 
-        onPress={handleSetDuration}
-        title="Set Duration"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter duration in seconds"
-        keyboardType="numeric"
-        value={inputDuration}
-        onChangeText={setInputDuration}
-      />
-
+        <Text style={styles.setterLabel}>Set Timer Duration:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Seconds"
+          keyboardType="numeric"
+          value={inputDuration}
+          onChangeText={setInputDuration}
+        />
+        <TouchableOpacity onPress={handleSetDuration} style={styles.setButton}>
+          <Text style={styles.buttonText}>Set</Text>
+        </TouchableOpacity>
       </View>
+
+      {/* Notification Settings */}
+      <View style={styles.notificationContainer}>
+        <Text style={styles.notificationLabel}>Notification Settings:</Text>
+        <TouchableOpacity onPress={toggleLoudNotifications} style={[styles.button, loudNotificationsEnabled ? styles.loudButton : styles.quietButton]}>
+          <Text style={styles.buttonText}>
+            {loudNotificationsEnabled ? 'Loud Notifications On' : 'Quiet Notifications On'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* About Section */}
+      <TouchableOpacity onPress={() => {/* Add about modal logic */}} style={styles.aboutButton}>
+        <Text style={styles.buttonText}>About 20/20/20 Rule</Text>
+      </TouchableOpacity>
 
       <StatusBar style="auto" />
-    </View>
+    </ScrollView>
   );
 }

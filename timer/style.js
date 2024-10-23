@@ -37,117 +37,108 @@ const colors = selectedTheme;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20, 
-  },
-  timerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: colors.timerText,
-  },
-  timeDisplay: {
-    fontSize: 48,  
-    fontWeight: 'bold',
-    textAlign: 'center',  
-    marginBottom: 30,
-    color: colors.text,
-  },
-  permissionText: {
-    color: colors.errorText,
-    marginTop: 10,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    width: '80%',
-  },
-  button: {
-    minWidth: 80,
-    marginHorizontal: 5,
-    backgroundColor: colors.buttonBackground,
-  },
-  buttonText: {
-    color: colors.buttonText,
-  },
-});
-
-const styles2 = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20, 
+    padding: 20,
   },
   titleText: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 15,
+    marginBottom: 20,
     color: colors.timerText,
+    textAlign: 'center',
   },
-  timerText: {
-    fontSize: 55,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: colors.timerText,
+  timerContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  timerLabel: {
+    fontSize: 18,
+    color: colors.text,
+    marginBottom: 5,
   },
   timeDisplay: {
-    fontSize: 70,  
+    fontSize: 60,
     fontWeight: 'bold',
-    textAlign: 'center',  
-    marginBottom: 30,
-    color: colors.text,
+    color: colors.timerText,
   },
   permissionText: {
     color: colors.errorText,
-    marginTop: 10,
     marginBottom: 20,
     textAlign: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    width: '80%',
-  },
-  buttonContainer2: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: "flex-start",
-    position: "absolute",
-    top: 10,
-    left: 10,
-    width: '30%',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: 30,
   },
   button: {
-    minWidth:100,
-    maxWidth:300,
-    minHeight:50,
-    maxHeight:150,
-    marginHorizontal: 5,
     backgroundColor: colors.buttonBackground,
-  },
-  setterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    marginHorizontal: 5,
-    width: '35%',
-  },
-  input:{
-    color: colors.text
-
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    minWidth: 100,
+    alignItems: 'center',
   },
   buttonText: {
     color: colors.buttonText,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  exitButton: {
+    backgroundColor: '#FF6B6B',
+  },
+  setterContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  setterLabel: {
+    fontSize: 16,
+    color: colors.text,
+    marginBottom: 10,
+  },
+  input: {
+    backgroundColor: colors.buttonBackground,
+    color: colors.buttonText,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 5,
+    fontSize: 16,
+    width: '50%',
+    marginBottom: 10,
+  },
+  setButton: {
+    backgroundColor: colors.buttonBackground,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  notificationContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  notificationLabel: {
+    fontSize: 16,
+    color: colors.text,
+    marginBottom: 10,
+  },
+  loudButton: {
+    backgroundColor: '#FF9F1C',
+  },
+  quietButton: {
+    backgroundColor: '#2EC4B6',
+  },
+  aboutButton: {
+    backgroundColor: colors.buttonBackground,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
   },
 });
 
-export default styles2;
+export default styles;
