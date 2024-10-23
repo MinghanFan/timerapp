@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
 import { initializeNotifications, sendWebNotification, sendWebNotificationNoisy } from './notifications';
 import styles from './style.js';
@@ -16,6 +16,7 @@ export default function App() {
   const [timerDuration, setTimerDuration] = useState(1200); // State for timer duration
   const [isPaused, setIsPaused] = useState(false); // State for pause
   const [loudNotificationsEnabled, setLoudNotificationsEnabled] = useState(false); // New state for loud notifications
+  const [modalVisible, setModalVisible] = useState(false);
 
 
   useEffect(() => {
@@ -93,6 +94,10 @@ export default function App() {
     setLoudNotificationsEnabled(prev => !prev);
   };
 
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.titleText}>20/20/20 Vision Timer</Text>
@@ -144,9 +149,41 @@ export default function App() {
       </View>
 
       {/* About Section */}
-      <TouchableOpacity onPress={() => {/* Add about modal logic */}} style={styles.aboutButton}>
+      <TouchableOpacity onPress={toggleModal} style={styles.aboutButton}>
         <Text style={styles.buttonText}>About 20/20/20 Rule</Text>
       </TouchableOpacity>
+
+      {/* Modal for 20/20/20 Rule Information */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={toggleModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>The 20/20/20 Rule</Text>
+            <Text style={styles.modalText}>
+              The 20/20/20 rule is a simple guideline to reduce eye strain caused by looking at digital screens for extended periods:
+            </Text>
+            <Text style={styles.modalText}>
+              • Every 20 minutes
+            </Text>
+            <Text style={styles.modalText}>
+              • Look at something 20 feet away
+            </Text>
+            <Text style={styles.modalText}>
+              • For at least 20 seconds
+            </Text>
+            <Text style={styles.modalText}>
+              This practice helps relax the eye muscles and reduces the risk of computer vision syndrome and digital eye strain.
+            </Text>
+            <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <StatusBar style="auto" />
     </ScrollView>
