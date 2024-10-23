@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
-import { initializeNotifications, sendWebNotification, sendWebNotificationNoisy } from './notifications';
+import { initializeNotifications, sendNotification, sendNotificationNoisy } from './notifications';
 import styles from './style.js';
 
 
@@ -31,18 +31,18 @@ export default function App() {
     if (timeRemaining === 0 && !notificationSent) {
       if (loudNotificationsEnabled) {
         if (typeof window !== "undefined") {
-          sendWebNotificationNoisy(`${timerDuration / 60} minutes completed`);
+          sendNotificationNoisy(`${timerDuration / 60} minutes completed`);
           
           setTimeout(() => {
-            sendWebNotificationNoisy("20s after");
+            sendNotificationNoisy("20s after");
           }, 20000);
         }
       } else {
         if (typeof window !== "undefined") {
-          sendWebNotification(`${timerDuration / 60} minutes completed`);
+          sendNotification(`${timerDuration / 60} minutes completed`);
 
           setTimeout(() => {
-            sendWebNotification("20s after");
+            sendNotification("20s after");
           }, 20000);
         }
       }
