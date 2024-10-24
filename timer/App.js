@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal } from 'react-native';
+import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Platform } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
 import { initializeNotifications, sendWebNotification, sendWebNotificationNoisy } from './notifications';
 import styles from './style.js';
@@ -17,7 +17,7 @@ export default function App() {
   const [isPaused, setIsPaused] = useState(false); // State for pause
   const [loudNotificationsEnabled, setLoudNotificationsEnabled] = useState(false); // New state for loud notifications
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [deviceType, setDeviceType] = useState('');
 
   useEffect(() => {
     initializeNotifications().then(granted => {
@@ -26,6 +26,16 @@ export default function App() {
 
     return () => clearInterval(intervalId); 
   }, [intervalId]);
+
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      setDeviceType('iOS');
+    } else if (Platform.OS === 'android') {
+      setDeviceType('Android');
+    } else {
+      setDeviceType('Web');
+    }
+  }, []);
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
@@ -100,6 +110,7 @@ export default function App() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.deviceTypeText}>Device Type: {deviceType}</Text>
       <Text style={styles.titleText}>20/20/20 Vision Timer</Text>
       
       {/* Timer Display */}
