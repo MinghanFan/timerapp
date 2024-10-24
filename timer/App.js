@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Platform } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
-import { initializeNotifications, sendNotification, sendNotificationNoisy } from './notifications';
 import styles from './style.js';
 
+// Import platform-specific notification modules
+import { initializeIOSNotifications, sendIOSNotification, sendIOSNotificationNoisy } from './iosNotifications';
+import { initializeAndroidNotifications, sendAndroidNotification, sendAndroidNotificationNoisy } from './androidNotifications';
+import { initializeWebNotifications, sendWebNotification, sendWebNotificationNoisy } from './webNotifications';
 
 export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(1200); 
@@ -18,8 +21,28 @@ export default function App() {
   const [loudNotificationsEnabled, setLoudNotificationsEnabled] = useState(false); // New state for loud notifications
   const [modalVisible, setModalVisible] = useState(false);
   const [deviceType, setDeviceType] = useState('');
+  const [notificationModule, setNotificationModule] = useState({
+    initialize: () => {},
+    sendNotification: () => {},
+    sendNoisyNotification: () => {},
+  });
 
   useEffect(() => {
+    let initializeNotifications, sendNotification, sendNoisyNotification;
+
+    if (Platform.OS === 'ios') {
+      setDeviceType('iOS');
+      ({ initializeIOSNotifications: initializeNotifications, sendIOSNotification: sendNotification, sendIOSNotificationNoisy: sendNoisyNotification } = require('./iosNotifications'));
+    } else if (Platform.OS === 'android') {
+      setDeviceType('Android');
+      ({ initializeAndroidNotifications: initializeNotifications, sendAndroidNotification: sendNotification, sendAndroidNotificationNoisy: sendNoisyNotification } = require('./androidNotifications'));
+    } else {
+      setDeviceType('Web');
+      ({ initializeWebNotifications: initializeNotifications, sendWebNotification: sendNotification, sendWebNotificationNoisy: sendNoisyNotification } = require('./webNotifications'));
+    }
+
+    setNotificationModule({ initialize: initializeNotifications, sendNotification, sendNoisyNotification });
+
     initializeNotifications().then(granted => {
       setHasPermission(granted);
     });
@@ -34,40 +57,38 @@ export default function App() {
       setDeviceType('Android');
     } else {
       setDeviceType('Web');
+      
     }
   }, []);
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
+      const message = `${timerDuration / 60} minutes completed`;
+      
       if (loudNotificationsEnabled) {
-        if (typeof window !== "undefined") {
-          sendNotificationNoisy(`${timerDuration / 60} minutes completed`);
-          
-          setTimeout(() => {
-            sendNotificationNoisy("20s after");
-          }, 20000);
-        }
+        notificationModule.sendNoisyNotification(message);
+        
+        setTimeout(() => {
+          notificationModule.sendNoisyNotification("20s after");
+        }, 20000);
       } else {
-        if (typeof window !== "undefined") {
-          sendNotification(`${timerDuration / 60} minutes completed`);
+        notificationModule.sendNotification(message);
 
-          setTimeout(() => {
-            sendNotification("20s after");
-          }, 20000);
-        }
+        setTimeout(() => {
+          notificationModule.sendNotification("20s after");
+        }, 20000);
       }
 
       setNotificationSent(true);
-
       clearInterval(intervalId);
       setIsRunning(false);
 
       setTimeout(() => {
-        setTimeRemaining(timerDuration); 
-        setNotificationSent(false); 
-      }, 1000); 
+        setTimeRemaining(timerDuration);
+        setNotificationSent(false);
+      }, 1000);
     }
-  }, [timeRemaining, notificationSent, intervalId, timerDuration]);
+  }, [timeRemaining, notificationSent, intervalId, timerDuration, loudNotificationsEnabled, notificationModule]);
 
   const handleStartPause = () => {
     if (isRunning) {
