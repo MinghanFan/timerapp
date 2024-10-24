@@ -10,23 +10,24 @@ import { initializeAndroidNotifications, sendAndroidNotification, sendAndroidNot
 import { initializeWebNotifications, sendWebNotification, sendWebNotificationNoisy } from './webNotifications';
 
 export default function App() {
-  const [timeRemaining, setTimeRemaining] = useState(1200); 
-  const [isRunning, setIsRunning] = useState(false);  
-  const [intervalId, setIntervalId] = useState(null); 
-  const [hasPermission, setHasPermission] = useState(false);  
-  const [notificationSent, setNotificationSent] = useState(false); 
+  const [timeRemaining, setTimeRemaining] = useState(1200);  // State for time remaining
+  const [isRunning, setIsRunning] = useState(false);  // State for timer running
+  const [intervalId, setIntervalId] = useState(null); // State for interval ID
+  const [hasPermission, setHasPermission] = useState(false);  // State for permission
+  const [notificationSent, setNotificationSent] = useState(false); // State for notification sent
   const [inputDuration, setInputDuration] = useState(''); // State for input
   const [timerDuration, setTimerDuration] = useState(1200); // State for timer duration
   const [isPaused, setIsPaused] = useState(false); // State for pause
   const [loudNotificationsEnabled, setLoudNotificationsEnabled] = useState(false); // New state for loud notifications
-  const [modalVisible, setModalVisible] = useState(false);
-  const [deviceType, setDeviceType] = useState('');
+  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
+  const [deviceType, setDeviceType] = useState(''); // State for device type
   const [notificationModule, setNotificationModule] = useState({
     initialize: () => {},
     sendNotification: () => {},
     sendNoisyNotification: () => {},
   });
 
+  // Initialize notifications based on platform
   useEffect(() => {
     let initializeNotifications, sendNotification, sendNoisyNotification;
 
@@ -50,6 +51,7 @@ export default function App() {
     return () => clearInterval(intervalId); 
   }, [intervalId]);
 
+  // visual display of device type for debugging : removve from prod 
   useEffect(() => {
     if (Platform.OS === 'ios') {
       setDeviceType('iOS');
