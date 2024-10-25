@@ -21,22 +21,34 @@ export const startTimer = async (setHasPermission, setIsRunning, setIntervalId, 
       return;
     }
 
-    // Get the current system time and calculate the end time
-    const startTime = Date.now();
-    const endTime = startTime + duration * 1000; // Convert duration from seconds to milliseconds
-
+    // Initialize the interval
     const id = setInterval(() => {
-      const currentTime = Date.now();
-      const timeRemaining = Math.max(Math.floor((endTime - currentTime) / 1000), 0); // Calculate remaining time in seconds
-      setTimeRemaining(timeRemaining);
+      setIsRunning(true);
 
-      // Format and display time properly
-      if (timeRemaining === 0) {
-        clearInterval(id); // Stop the timer when time is up
-        setIsRunning(false);
-      }
+      // Update the remaining time every second
+      setTimeRemaining((prevTime) => {
+        // If time is up, reset to the duration and send a notification
+        if (prevTime <= 0) {
+          setTimeout(() => {
+            setTimeRemaining(duration); // Reset timeRemaining to the initial duration
+          }, 1000);
+
+          // Trigger notification and repeat
+          if (permissionGranted) {
+            setTimeout(() => {
+              // Trigger the follow-up notification 20 seconds after the first
+              if (typeof notificationFunction === 'function') {
+                notificationFunction("20s after");
+              }
+            }, 20000);
+          }
+          return duration; // Reset countdown
+        }
+        return prevTime - 1;
+      });
     }, 1000); // Update every second
 
+    // Save the interval ID for later use
     setIntervalId(id);
   }
 };

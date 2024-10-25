@@ -51,7 +51,7 @@ export default function App() {
     return () => clearInterval(intervalId); 
   }, [intervalId]);
 
-  // visual display of device type for debugging : removve from prod 
+  // Visual display of device type for debugging : remove from prod 
   useEffect(() => {
     if (Platform.OS === 'ios') {
       setDeviceType('iOS');
@@ -59,7 +59,6 @@ export default function App() {
       setDeviceType('Android');
     } else {
       setDeviceType('Web');
-      
     }
   }, []);
 
@@ -69,28 +68,25 @@ export default function App() {
       
       if (loudNotificationsEnabled) {
         notificationModule.sendNoisyNotification(message);
-        
         setTimeout(() => {
           notificationModule.sendNoisyNotification("20s after");
         }, 20000);
       } else {
         notificationModule.sendNotification(message);
-
         setTimeout(() => {
           notificationModule.sendNotification("20s after");
         }, 20000);
       }
 
       setNotificationSent(true);
-      clearInterval(intervalId);
-      setIsRunning(false);
+      setTimeRemaining(timerDuration); // Reset timeRemaining to timer duration for screen display
 
+      // Reset notificationSent to allow notifications in the next cycle
       setTimeout(() => {
-        setTimeRemaining(timerDuration);
         setNotificationSent(false);
-      }, 1000);
+      }, 1000); // Small delay to reset notificationSent
     }
-  }, [timeRemaining, notificationSent, intervalId, timerDuration, loudNotificationsEnabled, notificationModule]);
+  }, [timeRemaining, notificationSent, timerDuration, loudNotificationsEnabled, notificationModule]);
 
   const handleStartPause = () => {
     if (isRunning) {
