@@ -169,14 +169,16 @@ export default function App() {
       </View>
 
       {/* Notification Settings */}
-      <View style={styles.notificationContainer}>
-        <Text style={styles.notificationLabel}>Notification Settings:</Text>
-        <TouchableOpacity onPress={toggleLoudNotifications} style={[styles.button, loudNotificationsEnabled ? styles.loudButton : styles.quietButton]}>
-          <Text style={styles.buttonText}>
-            {loudNotificationsEnabled ? 'Loud Notifications On' : 'Quiet Notifications On'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {deviceType === 'Web' && (
+        <View style={styles.notificationContainer}>
+          <Text style={styles.notificationLabel}>Notification Settings:</Text>
+          <TouchableOpacity onPress={toggleLoudNotifications} style={[styles.button, loudNotificationsEnabled ? styles.loudButton : styles.quietButton]}>
+            <Text style={styles.buttonText}>
+              {loudNotificationsEnabled ? 'Loud Notifications On' : 'Quiet Notifications On'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* About Section */}
       <TouchableOpacity onPress={toggleModal} style={styles.aboutButton}>
