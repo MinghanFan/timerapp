@@ -1,6 +1,7 @@
 // Import the Notifications module from expo-notifications
 import * as Notifications from 'expo-notifications';
 
+
 // Function to initialize notifications and request permissions for Android
 export const initializeAndroidNotifications = async () => {
   // Request notification permissions using expo-notifications
@@ -37,7 +38,7 @@ export const sendAndroidNotification = async (message) => {
     content: {
       title: 'Reminder',
       body: message,
-      sound: true,
+      sound: true, // Default sound on Android
     },
     trigger: { seconds: 1 },
   });
@@ -51,7 +52,7 @@ export const sendAndroidNotificationNoisy = async (message) => {
       content: {
         title: 'Noisy Reminder',
         body: message,
-        sound: 'timer/test.wav', // Ensure the sound file is in the correct directory
+        sound: 'harp_lightcurve-[AudioTrimmer.com].mp3', // Path to your custom sound
       },
       trigger: { seconds: 1 },
     });
