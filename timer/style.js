@@ -18,7 +18,7 @@ const colorThemes = [
     buttonText: '#000',
     errorText: 'darkred',
   },
-  //just adding this manually for mvp given current mvp design
+  //mvp background: 2
   {
     background: '#265266',
     text: '#fff',
@@ -26,7 +26,25 @@ const colorThemes = [
     buttonBackground: '#E0E0E0',
     buttonText: '#000',
     errorText: '#000',
-  }
+  },
+  //light mode: 3
+  {
+    background: '#fff7ff',
+    text: '#000',
+    timerText: '#000',
+    buttonBackground: '#ddabdc',
+    buttonText: '#000',
+    errorText: '#000',
+  },
+  //dark mode: 4
+  {
+    background: '#302b3d',
+    text: '#b2b9d3',
+    timerText: '#b2b9d3',
+    buttonBackground: '#5c5888',
+    buttonText: '#000',
+    errorText: '#000',
+  },
   // Add more themes as needed
 ];
 
