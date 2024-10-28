@@ -49,7 +49,7 @@ const colorThemes = [
 ];
 
 // Select the desired theme
-const selectedTheme = colorThemes[2]; // Change the index to switch themes
+const selectedTheme = colorThemes[4]; // Change the index to switch themes
 
 const colors = selectedTheme;
 

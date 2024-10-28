@@ -51,16 +51,16 @@ export default function App() {
     return () => clearInterval(intervalId); 
   }, [intervalId]);
 
-  // Visual display of device type for debugging : remove from prod 
-  useEffect(() => {
-    if (Platform.OS === 'ios') {
-      setDeviceType('iOS');
-    } else if (Platform.OS === 'android') {
-      setDeviceType('Android');
-    } else {
-      setDeviceType('Web');
-    }
-  }, []);
+  // // Visual display of device type for debugging : remove from prod 
+  // useEffect(() => {
+  //   if (Platform.OS === 'ios') {
+  //     setDeviceType('iOS');
+  //   } else if (Platform.OS === 'android') {
+  //     setDeviceType('Android');
+  //   } else {
+  //     setDeviceType('Web');
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
