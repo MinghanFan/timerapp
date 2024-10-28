@@ -5,20 +5,12 @@ import * as Notifications from 'expo-notifications';
 // Function to initialize notifications and request permissions for Android
 export const initializeAndroidNotifications = async () => {
   // Request notification permissions using expo-notifications
-  const { status } = await Notifications.getPermissionsAsync();
-  let finalStatus = status;
+  const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Permission for notifications not granted!');
+      return;
+    }
 
-  // If permission hasn't been granted, request it
-  if (finalStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
-
-  // If permission is still not granted, alert the user and return false
-  if (finalStatus !== 'granted') {
-    alert('Permission for notifications was not granted.');
-    return false;
-  }
 
   // Set the notification handling behavior (e.g., show notifications immediately)
   Notifications.setNotificationHandler({
@@ -44,7 +36,7 @@ export const sendAndroidNotification = async (message) => {
   });
 };
 
-// Function to send a noisy notification on Android with a custom sound
+//Function to send a noisy notification on Android with a custom sound
 export const sendAndroidNotificationNoisy = async (message) => {
   try {
     // Schedule a notification with a custom sound

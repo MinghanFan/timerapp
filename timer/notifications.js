@@ -6,6 +6,9 @@ import { sendWebNotification, sendWebNotificationNoisy, initializeWebNotificatio
 // Import iOS-specific notifications
 import { sendIOSNotification, sendIOSNotificationNoisy, initializeIOSNotifications } from './iosNotifications';
 
+//import android-specific notifications
+import { sendAndroidNotification, sendAndroidNotificationNoisy, initializeAndroidNotifications } from './androidNotifications';
+
 // Function to initialize notifications based on platform
 export const initializeNotifications = async () => {
   if (Platform.OS === 'web') {
@@ -14,6 +17,9 @@ export const initializeNotifications = async () => {
   } else if (Platform.OS === 'ios') {
     // Initialize iOS notifications
     return await initializeIOSNotifications();
+  } else if (Platform.OS === 'android') {
+    // Initialize Android notifications
+    return await initializeAndroidNotifications();
   }
 };
 
@@ -25,6 +31,9 @@ export const sendNotification = (message) => {
   } else if (Platform.OS === 'ios') {
     // Send iOS notification
     sendIOSNotification(message);
+  } else if (Platform.OS === 'android') {
+    // Send Android notification
+    sendAndroidNotification(message);
   }
 };
 
@@ -36,5 +45,8 @@ export const sendNotificationNoisy = (message) => {
   } else if (Platform.OS === 'ios') {
     // Send noisy iOS notification
     sendIOSNotificationNoisy(message);
+  } else if (Platform.OS === 'android') {
+    // Send noisy Android notification
+    sendAndroidNotificationNoisy(message);
   }
 };
