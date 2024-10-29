@@ -64,7 +64,7 @@ export default function App() {
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
-      const message = `${timerDuration / 60} minutes completed`;
+      const message = `${Math.floor(timerDuration / 60)} minutes ${timerDuration % 60} seconds completed`;
       
       if (loudNotificationsEnabled) {
         notificationModule.sendNoisyNotification(message);
