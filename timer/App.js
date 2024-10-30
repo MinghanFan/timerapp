@@ -57,16 +57,6 @@ export default function App() {
     return () => clearInterval(intervalId); 
   }, [intervalId]);
 
-  // // Visual display of device type for debugging : remove from prod 
-  // useEffect(() => {
-  //   if (Platform.OS === 'ios') {
-  //     setDeviceType('iOS');
-  //   } else if (Platform.OS === 'android') {
-  //     setDeviceType('Android');
-  //   } else {
-  //     setDeviceType('Web');
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
@@ -151,7 +141,6 @@ export default function App() {
         <Ionicons name="settings-outline" size={24} color={styles.buttonText.color} />
       </TouchableOpacity>
 
-      <Text style={styles.deviceTypeText}>Device Type: {deviceType}</Text>
       <Text style={styles.titleText}>20/20/20 Vision Timer</Text>
       
       {/* Timer Display */}
