@@ -3,6 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Platform } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
 import styles from './style.js';
+import { Ionicons } from '@expo/vector-icons';
+import { colorThemes, getThemeStyles, getThemeColors } from './style.js';
 
 // Import platform-specific notification modules
 import { initializeIOSNotifications, sendIOSNotification, sendIOSNotificationNoisy } from './iosNotifications';
@@ -26,6 +28,8 @@ export default function App() {
     sendNotification: () => {},
     sendNoisyNotification: () => {},
   });
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [themeIndex, setThemeIndex] = useState(4); // Starting with dark mode (index 4)
 
   // Initialize notifications based on platform
   useEffect(() => {
@@ -127,8 +131,24 @@ export default function App() {
     setModalVisible(!modalVisible);
   };
 
+  const handleThemeChange = (index) => {
+    setThemeIndex(index);
+    setSettingsModalVisible(false);
+  };
+
+  // Get current styles and colors based on theme
+  const styles = getThemeStyles(themeIndex);
+  const colors = getThemeColors(themeIndex);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity 
+        style={styles.settingsButton}
+        onPress={() => setSettingsModalVisible(true)}
+      >
+        <Ionicons name="settings-outline" size={24} color={styles.buttonText.color} />
+      </TouchableOpacity>
+
       <Text style={styles.deviceTypeText}>Device Type: {deviceType}</Text>
       <Text style={styles.titleText}>20/20/20 Vision Timer</Text>
       
@@ -211,6 +231,50 @@ export default function App() {
               This practice helps relax the eye muscles and reduces the risk of computer vision syndrome and digital eye strain.
             </Text>
             <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={settingsModalVisible}
+        onRequestClose={() => setSettingsModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Settings</Text>
+            
+            <View style={styles.themeListContainer}>
+              <Text style={styles.modalText}>Choose Theme:</Text>
+              {colorThemes.map((theme, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.themeOptionContainer,
+                    themeIndex === index && styles.selectedTheme
+                  ]}
+                  onPress={() => handleThemeChange(index)}
+                >
+                  <View 
+                    style={[
+                      styles.themeColorPreview,
+                      { backgroundColor: theme.background }
+                    ]}
+                  />
+                  <Text style={styles.themeOptionText}>
+                    Theme {index + 1}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <TouchableOpacity 
+              onPress={() => setSettingsModalVisible(false)} 
+              style={styles.closeButton}
+            >
               <Text style={styles.buttonText}>Close</Text>
             </TouchableOpacity>
           </View>
