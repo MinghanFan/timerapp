@@ -41,6 +41,22 @@ export const initializeWebNotifications = async () => {
       });
     }
   }
+
+  export const sendWebAfterNotification = (message) => {
+    if (Notification.permission === "granted") {
+      new Notification(message, {
+      body: "You're good to go!",
+      tag: "timer-alert",
+      icon: "https://i.pinimg.com/736x/55/c3/97/55c39703ef11466669e8c734030bd7f9.jpg" 
+    });
+    } else {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          new Notification(message);
+        }
+      });
+    }
+  }
   
   // Function to send a noisy web notification
   export const sendWebNotificationNoisy = (message) => {

@@ -9,7 +9,8 @@ import { colorThemes, getThemeStyles, getThemeColors } from './style.js';
 // Import platform-specific notification modules
 import { initializeIOSNotifications, sendIOSNotification, sendIOSNotificationNoisy } from './iosNotifications';
 import { initializeAndroidNotifications, sendAndroidNotification, sendAndroidNotificationNoisy } from './androidNotifications';
-import { initializeWebNotifications, sendWebNotification, sendWebNotificationNoisy } from './webNotifications';
+import { initializeWebNotifications, sendWebNotification, sendWebNotificationNoisy, sendWebAfterNotification } from './webNotifications';
+import { sendAfterNotification } from './notifications.js';
 
 export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(1200);  // State for time remaining
@@ -27,26 +28,27 @@ export default function App() {
     initialize: () => {},
     sendNotification: () => {},
     sendNoisyNotification: () => {},
+    sendAfterNotification: () => {}
   });
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [themeIndex, setThemeIndex] = useState(4); // Starting with dark mode (index 4)
 
   // Initialize notifications based on platform
   useEffect(() => {
-    let initializeNotifications, sendNotification, sendNoisyNotification;
+    let initializeNotifications, sendNotification, sendNoisyNotification, sendAfterNotification;
 
     if (Platform.OS === 'ios') {
       setDeviceType('iOS');
-      ({ initializeIOSNotifications: initializeNotifications, sendIOSNotification: sendNotification, sendIOSNotificationNoisy: sendNoisyNotification } = require('./iosNotifications'));
+      ({ initializeIOSNotifications: initializeNotifications, sendIOSNotification: sendNotification, sendIOSNotificationNoisy: sendNoisyNotification} = require('./iosNotifications'));
     } else if (Platform.OS === 'android') {
       setDeviceType('Android');
       ({ initializeAndroidNotifications: initializeNotifications, sendAndroidNotification: sendNotification, sendAndroidNotificationNoisy: sendNoisyNotification } = require('./androidNotifications'));
     } else {
       setDeviceType('Web');
-      ({ initializeWebNotifications: initializeNotifications, sendWebNotification: sendNotification, sendWebNotificationNoisy: sendNoisyNotification } = require('./webNotifications'));
+      ({ initializeWebNotifications: initializeNotifications, sendWebNotification: sendNotification, sendWebNotificationNoisy: sendNoisyNotification, sendWebAfterNotification: sendAfterNotification  } = require('./webNotifications'));
     }
 
-    setNotificationModule({ initialize: initializeNotifications, sendNotification, sendNoisyNotification });
+    setNotificationModule({ initialize: initializeNotifications, sendNotification, sendNoisyNotification, sendAfterNotification });
 
     initializeNotifications().then(granted => {
       setHasPermission(granted);
@@ -78,7 +80,7 @@ export default function App() {
       } else {
         notificationModule.sendNotification(message);
         setTimeout(() => {
-          notificationModule.sendNotification("20s after");
+          notificationModule.sendAfterNotification("20s after");
         }, 20000);
       }
 

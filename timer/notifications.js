@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'; // Import Platform to detect the environment
 
 // Import web-specific notifications
-import { sendWebNotification, sendWebNotificationNoisy, initializeWebNotifications } from './webNotifications';
+import { sendWebNotification, sendWebNotificationNoisy, initializeWebNotifications, sendWebAfterNotification } from './webNotifications';
 
 // Import iOS-specific notifications
 import { sendIOSNotification, sendIOSNotificationNoisy, initializeIOSNotifications } from './iosNotifications';
@@ -36,6 +36,20 @@ export const sendNotification = (message) => {
     sendAndroidNotification(message);
   }
 };
+
+export const sendAfterNotification = (message) => {
+  if (Platform.OS === 'web') {
+    // Send web notification
+    sendWebAfterNotification(message);
+  } else if (Platform.OS === 'ios') {
+    // Send iOS notification
+    sendIOSNotification(message);
+  } else if (Platform.OS === 'android') {
+    // Send Android notification
+    sendAndroidNotification(message);
+  }
+};
+
 
 // Function to send a noisy notification based on platform
 export const sendNotificationNoisy = (message) => {
