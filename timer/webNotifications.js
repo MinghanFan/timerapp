@@ -27,7 +27,12 @@ export const initializeWebNotifications = async () => {
   // Function to send a web notification
   export const sendWebNotification = (message) => {
     if (Notification.permission === "granted") {
-      new Notification(message);
+      new Notification(message, {
+      body: "Look away!",
+      tag: "timer-alert",
+      requireInteraction: true,
+      icon: "https://i.pinimg.com/736x/55/c3/97/55c39703ef11466669e8c734030bd7f9.jpg" 
+    });
     } else {
       Notification.requestPermission().then(permission => {
         if (permission === "granted") {
@@ -35,7 +40,7 @@ export const initializeWebNotifications = async () => {
         }
       });
     }
-  };
+  }
   
   // Function to send a noisy web notification
   export const sendWebNotificationNoisy = (message) => {
