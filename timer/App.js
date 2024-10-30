@@ -39,10 +39,10 @@ export default function App() {
 
     if (Platform.OS === 'ios') {
       setDeviceType('iOS');
-      ({ initializeIOSNotifications: initializeNotifications, sendIOSNotification: sendNotification, sendIOSNotificationNoisy: sendNoisyNotification} = require('./iosNotifications'));
+      ({ initializeIOSNotifications: initializeNotifications, sendIOSNotification: sendNotification, sendIOSNotificationNoisy: sendNoisyNotificationm, sendIOSNotification: sendAfterNotification} = require('./iosNotifications'));
     } else if (Platform.OS === 'android') {
       setDeviceType('Android');
-      ({ initializeAndroidNotifications: initializeNotifications, sendAndroidNotification: sendNotification, sendAndroidNotificationNoisy: sendNoisyNotification } = require('./androidNotifications'));
+      ({ initializeAndroidNotifications: initializeNotifications, sendAndroidNotification: sendNotification, sendAndroidNotificationNoisy: sendNoisyNotification, sendAndroidNotification: sendAfterNotification } = require('./androidNotifications'));
     } else {
       setDeviceType('Web');
       ({ initializeWebNotifications: initializeNotifications, sendWebNotification: sendNotification, sendWebNotificationNoisy: sendNoisyNotification, sendWebAfterNotification: sendAfterNotification  } = require('./webNotifications'));
