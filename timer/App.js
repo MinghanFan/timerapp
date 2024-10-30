@@ -265,7 +265,7 @@ export default function App() {
                     ]}
                   />
                   <Text style={styles.themeOptionText}>
-                    Theme {index + 1}
+                    {theme.name}
                   </Text>
                 </TouchableOpacity>
               ))}

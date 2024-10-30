@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
 
-// Color themes array
+// Color themes array with names
 export const colorThemes = [
   {
+    name: "Forest",
     background: '#799191',
     text: '#000',
     timerText: '#000',
@@ -11,6 +12,7 @@ export const colorThemes = [
     errorText: 'red',
   },
   {
+    name: "Light Classic",
     background: '#FFFFFF',
     text: '#333',
     timerText: '#333',
@@ -18,8 +20,8 @@ export const colorThemes = [
     buttonText: '#000',
     errorText: 'darkred',
   },
-  //mvp background: 2
   {
+    name: "Ocean",
     background: '#265266',
     text: '#fff',
     timerText: '#fff',
@@ -27,8 +29,8 @@ export const colorThemes = [
     buttonText: '#000',
     errorText: '#000',
   },
-  //light mode: 3
   {
+    name: "Lavender Light",
     background: '#fff7ff',
     text: '#000',
     timerText: '#000',
@@ -36,8 +38,8 @@ export const colorThemes = [
     buttonText: '#000',
     errorText: '#000',
   },
-  //dark mode: 4
   {
+    name: "Night Mode",
     background: '#302b3d',
     text: '#b2b9d3',
     timerText: '#b2b9d3',
@@ -45,7 +47,6 @@ export const colorThemes = [
     buttonText: '#000',
     errorText: '#000',
   },
-  // Add more themes as needed
 ];
 
 // Create a theme context
