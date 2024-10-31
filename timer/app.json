@@ -4,7 +4,7 @@
     "slug": "timer",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon2.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -13,7 +13,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "sound": true
+      "sound": true,
+      "bundleIdentifier": "com.timer.eyeprotect"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,6 +27,11 @@
     },
     "plugins": [
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3e4c0d2d-10d4-497c-ba23-5ba71e14fd62"
+      }
+    }
   }
 }

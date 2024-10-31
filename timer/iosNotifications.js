@@ -39,7 +39,7 @@ export const sendIOSNotification = async (message) => {
       body: message,
       sound: true,
     },
-    trigger: { seconds: 1 },
+    trigger: null,
   });
 };
 
@@ -53,7 +53,7 @@ export const sendIOSNotificationNoisy = async (message) => {
           body: message,
           sound: 'timer/test.wav', 
         },
-        trigger: { seconds: 1 },
+        trigger: null,
       });
     } catch (error) {
       console.error('Error scheduling notification:', error);
