@@ -31,7 +31,7 @@ export default function App() {
     sendAfterNotification: () => {}
   });
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
-  const [themeIndex, setThemeIndex] = useState(4); // Starting with dark mode (index 4)
+  const [themeIndex, setThemeIndex] = useState(2); // Starting with dark mode (index 4)
 
   // Initialize notifications based on platform
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function App() {
           notificationModule.sendNoisyNotification("20s after");
         }, 20000);
       } else {
-        notificationModule.sendNotification(message);
+        notificationModule.sendNotification(message, themeIndex);
         setTimeout(() => {
           notificationModule.sendAfterNotification("20s after");
         }, 20000);
