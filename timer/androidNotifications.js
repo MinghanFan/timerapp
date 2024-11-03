@@ -1,6 +1,8 @@
 // Import required modules from expo-notifications and react-native
 import * as Notifications from 'expo-notifications';
 import { Alert } from 'react-native';
+import { getThemeColors } from './style.js';
+
 
 // Function to initialize notifications and request permissions for Android
 export const initializeAndroidNotifications = async () => {
@@ -23,13 +25,16 @@ export const initializeAndroidNotifications = async () => {
   return true;
 };
 
+
 // Function to send a simple notification on Android
-export const sendAndroidNotification = async (message) => {
+export const sendAndroidNotification = async (message, themeIndex) => {
   try {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: 'Reminder',
         body: message,
+        color: getThemeColors(themeIndex).text,
+        icon: './assets/icon2.png', // Path to your icon image
         sound: true, // Default sound on Android
         priority: Notifications.AndroidNotificationPriority.HIGH, // High priority to reduce delays
       },
@@ -48,6 +53,8 @@ export const sendAndroidNotificationNoisy = async (message) => {
       content: {
         title: 'Noisy Reminder',
         body: message,
+        color: 'fffffff',
+        icon: './assets/icon2.png', // Path to your icon image
         sound: 'harp_lightcurve',
         priority: Notifications.AndroidNotificationPriority.HIGH,
       },
