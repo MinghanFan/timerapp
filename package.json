@@ -1,5 +1,18 @@
 {
+  "homepage": "https://lilasch.github.io/timerapp",
   "dependencies": {
-    "expo": "^51.0.35"
+    "@expo/metro-runtime": "~3.2.3",
+    "expo": "^51.0.38",
+    "react-dom": "^18.3.1",
+    "react-native-web": "^0.19.13"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "scripts": {
+    "build": "expo build:web",
+    "deploy": "gh-pages -d web-build"
   }
 }
