@@ -32,6 +32,9 @@
       "eas": {
         "projectId": "3e4c0d2d-10d4-497c-ba23-5ba71e14fd62"
       }
+    },
+    "experiments": {
+      "baseUrl": "/timer"
     }
   }
 }
