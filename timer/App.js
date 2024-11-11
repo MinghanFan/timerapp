@@ -2,15 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Platform } from 'react-native';
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
-import styles from './style.js';
 import { Ionicons } from '@expo/vector-icons';
 import { colorThemes, getThemeStyles, getThemeColors } from './style.js';
-
-// Import platform-specific notification modules
-import { initializeIOSNotifications, sendIOSNotification, sendIOSNotificationNoisy } from './iosNotifications';
-import { initializeAndroidNotifications, sendAndroidNotification, sendAndroidNotificationNoisy } from './androidNotifications';
-import { initializeWebNotifications, sendWebNotification, sendWebNotificationNoisy, sendWebAfterNotification } from './webNotifications';
-import { sendAfterNotification } from './notifications.js';
 
 export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(1200);  // State for time remaining
