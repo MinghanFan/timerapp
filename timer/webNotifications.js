@@ -60,13 +60,19 @@ export const initializeWebNotifications = async () => {
   // Function to send a noisy web notification
   export const sendWebNotificationNoisy = (message) => {
     if (Notification.permission === "granted") {
-      new Notification(message);
+      new Notification(message, {
+        body: "Look away!",
+        icon: "https://i.pinimg.com/736x/55/c3/97/55c39703ef11466669e8c734030bd7f9.jpg" 
+        });
       const audio = new Audio("harp_lightcurve-[AudioTrimmer.com].mp3");
       audio.play();
     } else {
       Notification.requestPermission().then(permission => {
         if (permission === "granted") {
-          new Notification(message);
+          new Notification(message, {
+            body: "Look away!",
+            icon: "https://i.pinimg.com/736x/55/c3/97/55c39703ef11466669e8c734030bd7f9.jpg" 
+          });
           const audio = new Audio("harp_lightcurve-[AudioTrimmer.com].mp3");
           audio.play();
         }
