@@ -144,9 +144,10 @@ export default function App() {
       <TouchableOpacity 
         style={styles.settingsButton}
         onPress={() => setSettingsModalVisible(true)}
-      >
-        <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'settings')}</Text>
+        >
+        <Ionicons name="settings-outline" size={24} color={styles.buttonText.color} />
       </TouchableOpacity>
+
 
       {/* Language Selection */}
       <View style={styles.languageContainer}>
@@ -285,11 +286,15 @@ export default function App() {
             </TouchableOpacity>
 
             {/* Language Selection Button */}
+            {Platform.OS === 'web' && (
             <TouchableOpacity 
               onPress={() => setLanguageModalVisible(true)} 
-              style={styles.settingsButton}>
+              style={styles.settingsButton}
+            >
               <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'changeLanguage')}</Text>
             </TouchableOpacity>
+)}
+
 
           </View>
         </View>

@@ -109,7 +109,7 @@ const translations = {
       changeLanguage: "更改语言",
       chooseLanguage: "选择语言",
       reminderTitle: "提醒",
-      noisyReminderTitle: "响亮的提醒",
+      noisyReminderTitle: "声音提醒",
       lookAway: "请看远处！",
       goodToGo: "你可以继续了！",
       unsupportedBrowser: "此浏览器不支持桌面通知。",
