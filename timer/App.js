@@ -44,9 +44,14 @@ export default function App() {
       ({ initializeWebNotifications: initializeNotifications, sendWebNotification: sendNotification, sendWebNotificationNoisy: sendNoisyNotification, sendWebAfterNotification: sendAfterNotification } = require('./webNotifications'));
     }
 
-    setNotificationModule({ initialize: initializeNotifications, sendNotification, sendNoisyNotification, sendAfterNotification });
+    setNotificationModule({
+      initialize: (lang) => initializeNotifications(lang), // Pass language to initialization
+      sendNotification: (msg) => sendNotification(msg, currentLanguage), // Pass current language
+      sendNoisyNotification: (msg) => sendNoisyNotification(msg, currentLanguage), // Pass current language
+      sendAfterNotification: (msg) => sendAfterNotification(msg, currentLanguage), // Pass current language
+    });    
 
-    initializeNotifications().then(granted => {
+    initializeNotifications(currentLanguage).then(granted => {
       setHasPermission(granted);
     });
 
@@ -55,19 +60,19 @@ export default function App() {
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
-      const message = `${Math.floor(timerDuration / 60)} minutes ${timerDuration % 60} seconds completed`;
+      const message = `${Math.floor(timerDuration / 60)} ${getTranslation(currentLanguage, 'minutes')} ${timerDuration % 60} ${getTranslation(currentLanguage, 'seconds')} ${getTranslation(currentLanguage, 'completed')}`;
       
       if (loudNotificationsEnabled) {
-        notificationModule.sendNoisyNotification(message);
+        notificationModule.sendNoisyNotification(message, currentLanguage);
         setTimeout(() => {
-          notificationModule.sendNoisyNotification("20s after");
+          notificationModule.sendNoisyNotification(getTranslation(currentLanguage, 'goodToGo'), currentLanguage);
         }, 20000);
       } else {
-        notificationModule.sendNotification(message, themeIndex);
+        notificationModule.sendNotification(message, currentLanguage);
         setTimeout(() => {
-          notificationModule.sendAfterNotification("20s after");
+          notificationModule.sendAfterNotification(getTranslation(currentLanguage, 'goodToGo'), currentLanguage);
         }, 20000);
-      }
+      }      
 
       setNotificationSent(true);
       setTimeRemaining(timerDuration); // Reset timeRemaining to timer duration for screen display
@@ -78,6 +83,12 @@ export default function App() {
       }, 1000); // Small delay to reset notificationSent
     }
   }, [timeRemaining, notificationSent, timerDuration, loudNotificationsEnabled, notificationModule]);
+
+  useEffect(() => {
+    if (notificationModule.initialize) {
+      notificationModule.initialize(currentLanguage); // Reinitialize notifications with the new language
+    }
+  }, [currentLanguage, notificationModule]);  
 
   const handleStartPause = () => {
     if (isRunning) {
@@ -187,7 +198,7 @@ export default function App() {
           onChangeText={setInputDuration}
         />
         <TouchableOpacity onPress={handleSetDuration} style={styles.setButton}>
-          <Text style={styles.buttonText}>Set</Text>
+          <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'set')}</Text>
         </TouchableOpacity>
       </View>
 
