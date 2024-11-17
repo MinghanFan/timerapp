@@ -273,7 +273,8 @@ export default function App() {
           <TreeProgress 
             completedSessions={completedSessions}
             onClose={() => setShowTreeProgress(false)}
-            colors={colors} // Pass the current theme colors
+            colors={colors}
+            onReset={() => setCompletedSessions(0)} 
           />
         </View>
       </Modal>

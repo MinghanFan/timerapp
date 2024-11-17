@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import Svg, { Path, G, Circle, Ellipse } from 'react-native-svg';
 
 const TreeSVG = ({ stage }) => {
@@ -84,7 +84,7 @@ const TreeSVG = ({ stage }) => {
   );
 };
 
-const TreeProgress = ({ completedSessions = 0, onClose, style, colors }) => {
+const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset }) => {
   const currentStage = Math.min(Math.floor(completedSessions/2), 5);
   const stageLabels = [
     'Plant your first seed!',
@@ -94,6 +94,24 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors }) => {
     'Medium Tree',
     'Large Tree'
   ];
+
+  const handleReset = () => {
+    Alert.alert(
+      "Reset Progress",
+      "Are you sure you want to reset your progress? This will set your completed sessions back to 0.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Reset",
+          onPress: () => onReset(),
+          style: "destructive"
+        }
+      ]
+    );
+  };
   
   return (
     <View style={[{
@@ -131,19 +149,35 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors }) => {
         />
       </View>
       
-      <TouchableOpacity 
-        onPress={onClose}
-        style={{
-          paddingVertical: 12,
-          paddingHorizontal: 20,
-          backgroundColor: colors.buttonBackground,
-          borderRadius: 25,
-        }}
-      >
-        <Text style={{ color: colors.buttonText, fontSize: 16, fontWeight: 'bold' }}>
-          Back to Timer
-        </Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingHorizontal: 20 }}>
+        <TouchableOpacity 
+          onPress={onClose}
+          style={{
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            backgroundColor: colors.buttonBackground,
+            borderRadius: 25,
+          }}
+        >
+          <Text style={{ color: colors.buttonText, fontSize: 16, fontWeight: 'bold' }}>
+            Back to Timer
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          onPress={handleReset}
+          style={{
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            backgroundColor: '#FF6B6B',
+            borderRadius: 25,
+          }}
+        >
+          <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' }}>
+            Reset Progress
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
