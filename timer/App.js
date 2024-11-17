@@ -5,6 +5,8 @@ import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
 import { Ionicons } from '@expo/vector-icons';
 import { colorThemes, getThemeStyles, getThemeColors } from './style.js';
 import { getTranslation, getAvailableLanguages } from './language';
+import TreeProgress from './TreeProgress';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(1200);  // State for time remaining
@@ -28,6 +30,11 @@ export default function App() {
   });
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
   const [themeIndex, setThemeIndex] = useState(2); // Starting with dark mode (index 4)
+  const [completedSessions, setCompletedSessions] = useState(0);
+  const [showTreeProgress, setShowTreeProgress] = useState(false);
+  const handleSessionComplete = () => {
+    setCompletedSessions(prev => prev + 1);
+  };
 
   // Initialize notifications based on platform
   useEffect(() => {
@@ -60,6 +67,7 @@ export default function App() {
 
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
+      handleSessionComplete();
       const message = `${Math.floor(timerDuration / 60)} ${getTranslation(currentLanguage, 'minutes')} ${timerDuration % 60} ${getTranslation(currentLanguage, 'seconds')} ${getTranslation(currentLanguage, 'completed')}`;
       
       if (loudNotificationsEnabled) {
@@ -89,6 +97,31 @@ export default function App() {
       notificationModule.initialize(currentLanguage); // Reinitialize notifications with the new language
     }
   }, [currentLanguage, notificationModule]);  
+
+  useEffect(() => {
+    const loadSessions = async () => {
+      try {
+        const saved = await AsyncStorage.getItem('completedSessions');
+        if (saved !== null) {
+          setCompletedSessions(parseInt(saved, 10));
+        }
+      } catch (e) {
+        console.error('Error loading sessions:', e);
+      }
+    };
+    loadSessions();
+  }, []);
+  
+  useEffect(() => {
+    const saveSessions = async () => {
+      try {
+        await AsyncStorage.setItem('completedSessions', completedSessions.toString());
+      } catch (e) {
+        console.error('Error saving sessions:', e);
+      }
+    };
+    saveSessions();
+  }, [completedSessions]);
 
   const handleStartPause = () => {
     if (isRunning) {
@@ -148,6 +181,13 @@ export default function App() {
         <Ionicons name="settings-outline" size={24} color={styles.buttonText.color} />
       </TouchableOpacity>
 
+      {/* Tree Progress Button */}
+      <TouchableOpacity 
+        style={styles.treeButton}
+        onPress={() => setShowTreeProgress(true)}
+        >
+        <Ionicons name="leaf-outline" size={24} color={styles.buttonText.color} />
+      </TouchableOpacity>
 
       {/* Language Selection */}
       <View style={styles.languageContainer}>
@@ -222,6 +262,22 @@ export default function App() {
         <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'about')}</Text>
       </TouchableOpacity>
 
+      {/* Tree Progress Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showTreeProgress}
+        onRequestClose={() => setShowTreeProgress(false)}
+      >
+        <View style={styles.modalContainer}>
+          <TreeProgress 
+            completedSessions={completedSessions}
+            onClose={() => setShowTreeProgress(false)}
+            colors={colors} // Pass the current theme colors
+          />
+        </View>
+      </Modal>
+
       {/* Modal for 20/20/20 Rule Information */}
       <Modal
         animationType="slide"
@@ -293,9 +349,7 @@ export default function App() {
             >
               <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'changeLanguage')}</Text>
             </TouchableOpacity>
-)}
-
-
+            )}
           </View>
         </View>
       </Modal>

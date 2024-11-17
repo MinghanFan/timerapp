@@ -253,7 +253,23 @@ export const getThemeStyles = (themeIndex) => {
       color: selectedTheme.buttonText,
       fontSize: 16,
       fontWeight: 'bold',
-    }
+    },
+    treeButton: {
+      position: 'absolute',
+      top: 40,
+      left: 20,
+      backgroundColor: selectedTheme.buttonBackground,
+      padding: 10,
+      borderRadius: 25,
+    },
+    resetButton: {
+      backgroundColor: '#FF6B6B', // Red color for emphasis
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 25,
+      alignItems: 'center',
+      marginTop: 10, // Add spacing
+    },
   });
 };
 
