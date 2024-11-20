@@ -16,6 +16,7 @@
       "sound": true,
       "bundleIdentifier": "com.timer.eyeprotect"
     },
+    
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
