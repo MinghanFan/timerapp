@@ -146,7 +146,7 @@ export default function App() {
   };
 
   const handleSetDuration = () => {
-    const newDuration = parseInt(inputDuration, 10);
+    const newDuration = (parseInt(inputDuration, 10)) * 60;
     if (!isNaN(newDuration) && newDuration > 0) {
       setTimerDuration(newDuration); // Update State
       setTimeRemaining(newDuration); // Reset time remaining
@@ -233,7 +233,7 @@ export default function App() {
         <Text style={styles.setterLabel}>{getTranslation(currentLanguage, 'setDuration')}</Text>
         <TextInput
           style={styles.input}
-          placeholder={getTranslation(currentLanguage, 'enterSeconds')}
+          placeholder={getTranslation(currentLanguage, 'Enter Minutes')}
           keyboardType="numeric"
           value={inputDuration}
           onChangeText={setInputDuration}
