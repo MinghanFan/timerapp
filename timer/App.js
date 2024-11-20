@@ -237,6 +237,7 @@ export default function App() {
           keyboardType="numeric"
           value={inputDuration}
           onChangeText={setInputDuration}
+          onSubmitEditing={handleSetDuration}
         />
         <TouchableOpacity onPress={handleSetDuration} style={styles.setButton}>
           <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'set')}</Text>
