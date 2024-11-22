@@ -3,22 +3,24 @@
     "version": ">= 12.6.2",
     "appVersionSource": "remote"
   },
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "ios": {
-        "simulator": true
+    "build": {
+      "preview": {
+        "android": {
+          "buildType": "apk"
+        }
+      }
+      ,
+      "preview2": {
+        "android": {
+          "gradleCommand": ":app:assembleRelease"
+        }
       },
-      "distribution": "internal"
-    },
-    "production": {
-      "autoIncrement": true
+      "preview3": {
+        "developmentClient": true
+      },
+      "preview4": {
+        "distribution": "internal"
+      },
+      "production": {}
     }
-  },
-  "submit": {
-    "production": {}
   }
-}

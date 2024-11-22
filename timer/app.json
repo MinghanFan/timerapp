@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.timer.eyeprotect"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,7 +32,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "3e4c0d2d-10d4-497c-ba23-5ba71e14fd62"
+        "projectId": "08bc6038-7d42-4ee8-aed5-30102eb6f418"
       }
     }
   }
