@@ -276,6 +276,7 @@ export default function App() {
             onClose={() => setShowTreeProgress(false)}
             colors={colors}
             onReset={() => setCompletedSessions(0)} 
+            language={currentLanguage}
           />
         </View>
       </Modal>

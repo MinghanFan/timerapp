@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions, Alert, Platform } from 'react-native';
 import Svg, { Path, G, Circle, Ellipse } from 'react-native-svg';
+import { getTranslation } from './language';
 
 const TreeSVG = ({ stage }) => {
   const treeStages = {
@@ -149,7 +150,7 @@ const TreeSVG = ({ stage }) => {
   );
 };
 
-const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset }) => {
+const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, language }) => {
   const isWeb = Platform.OS === 'web';
   
   // Different max stages and session requirements based on platform
@@ -172,35 +173,28 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset }
   
   // Full set of labels, mobile will only use 0-5
   const stageLabels = [
-    'Plant your first seed!',
-    'Your seed is sprouting!',
-    'Early seedling stage',
-    'Developing nicely',
-    'Growing into a sapling',
-    'Small but mighty',
-    'Growing stronger',
-    'Mature and beautiful',
-    'Full grown and majestic',
-    'A legendary tree!'
-  ];
+    getTranslation(language, 'plantSeed'),
+    getTranslation(language, 'seedSprouting'),
+    getTranslation(language, 'earlySeedling'),
+    getTranslation(language, 'developingSeedling'),
+    getTranslation(language, 'youngSapling'),
+    getTranslation(language, 'smallTree'),
+    getTranslation(language, 'growingTree'),
+    getTranslation(language, 'treeWithFlowers'),
+    getTranslation(language, 'treeWithFruits'),
+    getTranslation(language, 'majesticTree')
+  ];  
 
   const handleReset = () => {
     Alert.alert(
-      "Reset Progress",
-      "Are you sure you want to reset your progress? This will set your completed sessions back to 0.",
+      getTranslation(language, 'resetProgress'),
+      getTranslation(language, 'resetConfirm'),
       [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        {
-          text: "Reset",
-          onPress: () => onReset(),
-          style: "destructive"
-        }
+        { text: getTranslation(language, 'cancel'), style: 'cancel' },
+        { text: getTranslation(language, 'reset'), onPress: () => onReset(), style: 'destructive' }
       ]
     );
-  };
+  };  
   
   return (
     <View style={[{
@@ -217,13 +211,13 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset }
       
       <View style={{ alignItems: 'center', marginBottom: 20 }}>
         <Text style={{ fontSize: 24, fontWeight: 'bold', color: colors.text, marginBottom: 10 }}>
-          Your Progress Tree
+          {getTranslation(language, 'progressTree')}
         </Text>
         <Text style={{ fontSize: 16, color: colors.text, marginBottom: 5 }}>
           {stageLabels[currentStage]}
         </Text>
         <Text style={{ fontSize: 14, color: colors.text }}>
-          Completed Sessions: {completedSessions}
+          {`${getTranslation(language, 'completedSessions')}: ${completedSessions}`}
         </Text>
       </View>
       
@@ -240,8 +234,8 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset }
       
       <View style={[
         { 
-          flexDirection: 'row',
           width: '100%',
+          alignItems: 'center',
           paddingHorizontal: 20
         },
         isWeb ? { justifyContent: 'center' } : { justifyContent: 'space-between' }
@@ -253,10 +247,11 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset }
             paddingHorizontal: 20,
             backgroundColor: colors.buttonBackground,
             borderRadius: 25,
+            marginBottom: 10,
           }}
         >
           <Text style={{ color: colors.buttonText, fontSize: 16, fontWeight: 'bold' }}>
-            Back to Timer
+            {getTranslation(language, 'backToTimer')}
           </Text>
         </TouchableOpacity>
 
@@ -271,7 +266,7 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset }
             }}
           >
             <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' }}>
-              Reset Progress
+              {getTranslation(language, 'resetProgress')}
             </Text>
           </TouchableOpacity>
         )}
