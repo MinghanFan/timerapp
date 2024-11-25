@@ -4,12 +4,12 @@ import { StyleSheet } from 'react-native';
 export const colorThemes = [
   {
     name: "Forest",
-    background: '#799191',
-    text: '#000',
-    timerText: '#000',
-    buttonBackground: '#C8D3C4',
-    buttonText: '#fff',
-    errorText: 'red',
+    background: '#A8C3A0', 
+    text: '#2E4600', 
+    timerText: '#4B5320', 
+    buttonBackground: '#6B8E23', 
+    buttonText: '#FFFFFF', 
+    errorText: '#D9534F',
   },
   {
     name: "Light Classic",
@@ -40,12 +40,12 @@ export const colorThemes = [
   },
   {
     name: "Night Mode",
-    background: '#302b3d',
-    text: '#b2b9d3',
-    timerText: '#b2b9d3',
-    buttonBackground: '#5c5888',
-    buttonText: '#000',
-    errorText: '#000',
+    background: '#1c1b29', 
+    text: '#c3c8e7',
+    timerText: '#c3c8e7',
+    buttonBackground: '#46436f', 
+    buttonText: '#ffffff', 
+    errorText: '#ff5555', 
   },
 ];
 
