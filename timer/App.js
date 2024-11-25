@@ -350,7 +350,7 @@ export default function App() {
               onPress={() => setLanguageModalVisible(true)} 
               style={styles.settingsButton}
             >
-              <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'changeLanguage')}</Text>
+              <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'Language')}</Text>
             </TouchableOpacity>
             )}
           </View>
