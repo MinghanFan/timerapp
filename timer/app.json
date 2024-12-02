@@ -34,7 +34,7 @@
       }
     },
     "experiments": {
-      "baseUrl":  "/expo-gh-pages"
+      "baseUrl":  "/timerapp"
     }
   }
 }
