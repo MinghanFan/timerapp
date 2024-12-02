@@ -191,19 +191,6 @@ export default function App() {
       </TouchableOpacity>
       )}
 
-      {/* Language Selection */}
-      <View style={styles.languageContainer}>
-        {getAvailableLanguages().map((lang) => (
-          <TouchableOpacity
-            key={lang}
-            onPress={() => setCurrentLanguage(lang)}
-            style={styles.languageButton}
-          >
-            <Text style={styles.buttonText}>{lang.toUpperCase()}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       {/* Title */}
       <Text style={styles.titleText}>{getTranslation(currentLanguage, 'timerTitle')}</Text>
       
