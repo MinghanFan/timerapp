@@ -61,6 +61,13 @@ export const getThemeStyles = (themeIndex) => {
       justifyContent: 'center',
       padding: 20,
     },
+    treeContainer: {
+      flexGrow: 1,
+      zIndex: -1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 20,
+    },
     titleText: {
       fontSize: 28,
       fontWeight: 'bold',

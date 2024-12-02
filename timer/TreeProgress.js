@@ -240,6 +240,8 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, 
         },
         isWeb ? { justifyContent: 'center' } : { justifyContent: 'space-between' }
       ]}>
+
+        {!isWeb &&(
         <TouchableOpacity 
           onPress={onClose}
           style={{
@@ -254,6 +256,7 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, 
             {getTranslation(language, 'backToTimer')}
           </Text>
         </TouchableOpacity>
+        )}
 
         {!isWeb && (
           <TouchableOpacity 

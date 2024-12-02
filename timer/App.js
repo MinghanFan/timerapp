@@ -182,12 +182,14 @@ export default function App() {
       </TouchableOpacity>
 
       {/* Tree Progress Button */}
-      <TouchableOpacity 
+      {deviceType === 'Android' && (
+        <TouchableOpacity 
         style={styles.treeButton}
         onPress={() => setShowTreeProgress(true)}
         >
         <Ionicons name="leaf-outline" size={24} color={styles.buttonText.color} />
       </TouchableOpacity>
+      )}
 
       {/* Language Selection */}
       <View style={styles.languageContainer}>
@@ -262,6 +264,19 @@ export default function App() {
       <TouchableOpacity onPress={toggleModal} style={styles.aboutButton}>
         <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'about')}</Text>
       </TouchableOpacity>
+
+      {/* Tree Progress Web */}
+      {deviceType === 'Web' &&(
+        <View style={styles.treeContainer}>
+         <TreeProgress 
+            completedSessions={completedSessions}
+            onClose={() => setShowTreeProgress(false)}
+            colors={colors}
+            onReset={() => setCompletedSessions(0)} 
+            language={currentLanguage}
+          /> 
+        </View>
+      )}
 
       {/* Tree Progress Modal */}
       <Modal
