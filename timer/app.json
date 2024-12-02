@@ -34,7 +34,7 @@
       }
     },
     "experiments": {
-      "baseUrl": "/timer"
+      "baseUrl":  "/expo-gh-pages"
     }
   }
 }
