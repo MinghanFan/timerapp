@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Platform } from 'react-native';
-import { startTimer, pauseTimer, exitTimer, formatTime } from './timerNew.js';
+import { startTimer, pauseTimer, exitTimer, formatTime } from './timer.js';
 import { Ionicons } from '@expo/vector-icons';
 import { colorThemes, getThemeStyles, getThemeColors } from './style.js';
 import { getTranslation, getAvailableLanguages } from './language';
