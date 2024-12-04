@@ -24,7 +24,7 @@ export const initializeNotifications = async () => {
 };
 
 // Function to send a notification based on platform
-export const sendNotification = (message) => {
+export const sendNotification = (message, themeIndex) => {
   if (Platform.OS === 'web') {
     // Send web notification
     sendWebNotification(message);
@@ -33,7 +33,7 @@ export const sendNotification = (message) => {
     sendIOSNotification(message);
   } else if (Platform.OS === 'android') {
     // Send Android notification
-    sendAndroidNotification(message);
+    sendAndroidNotification(message, themeIndex);
   }
 };
 

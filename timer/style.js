@@ -4,12 +4,12 @@ import { StyleSheet } from 'react-native';
 export const colorThemes = [
   {
     name: "Forest",
-    background: '#799191',
-    text: '#000',
-    timerText: '#000',
-    buttonBackground: '#C8D3C4',
-    buttonText: '#fff',
-    errorText: 'red',
+    background: '#A8C3A0', 
+    text: '#2E4600', 
+    timerText: '#4B5320', 
+    buttonBackground: '#6B8E23', 
+    buttonText: '#FFFFFF', 
+    errorText: '#D9534F',
   },
   {
     name: "Light Classic",
@@ -40,12 +40,12 @@ export const colorThemes = [
   },
   {
     name: "Night Mode",
-    background: '#302b3d',
-    text: '#b2b9d3',
-    timerText: '#b2b9d3',
-    buttonBackground: '#5c5888',
-    buttonText: '#000',
-    errorText: '#000',
+    background: '#1c1b29', 
+    text: '#c3c8e7',
+    timerText: '#c3c8e7',
+    buttonBackground: '#46436f', 
+    buttonText: '#ffffff', 
+    errorText: '#ff5555', 
   },
 ];
 
@@ -57,6 +57,13 @@ export const getThemeStyles = (themeIndex) => {
     container: {
       flexGrow: 1,
       backgroundColor: selectedTheme.background,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 20,
+    },
+    treeContainer: {
+      flexGrow: 1,
+      zIndex: -1,
       alignItems: 'center',
       justifyContent: 'center',
       padding: 20,
@@ -232,6 +239,43 @@ export const getThemeStyles = (themeIndex) => {
     selectedTheme: {
       borderWidth: 2,
       borderColor: selectedTheme.buttonBackground,
+    },
+    languageContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginBottom: 20,
+    },
+    languageButton: {
+      backgroundColor: selectedTheme.buttonBackground,
+      paddingVertical: 10,
+      paddingHorizontal: 15,
+      borderRadius: 10,
+      marginHorizontal: 5,
+    },
+    languageListContainer: {
+      width: '100%',
+      marginVertical: 10
+    },
+    languageButtonText: {
+      color: selectedTheme.buttonText,
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    treeButton: {
+      position: 'absolute',
+      top: 40,
+      left: 20,
+      backgroundColor: selectedTheme.buttonBackground,
+      padding: 10,
+      borderRadius: 25,
+    },
+    resetButton: {
+      backgroundColor: '#FF6B6B', // Red color for emphasis
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 25,
+      alignItems: 'center',
+      marginTop: 10, // Add spacing
     },
   });
 };

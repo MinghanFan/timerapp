@@ -34,6 +34,9 @@
       "eas": {
         "projectId": "08bc6038-7d42-4ee8-aed5-30102eb6f418"
       }
+    },
+    "experiments": {
+      "baseUrl":  "/timerapp"
     }
   }
 }
