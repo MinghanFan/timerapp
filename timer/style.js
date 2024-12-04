@@ -240,26 +240,24 @@ export const getThemeStyles = (themeIndex) => {
       borderWidth: 2,
       borderColor: selectedTheme.buttonBackground,
     },
-    languageContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginBottom: 20,
-    },
     languageButton: {
-      backgroundColor: selectedTheme.buttonBackground,
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      borderRadius: 10,
-      marginHorizontal: 5,
+      fontSize: 16,
+      color: selectedTheme.text,
+      borderRadius: 5,
     },
     languageListContainer: {
       width: '100%',
-      marginVertical: 10
+      marginVertical: 10,
+    },
+    selectedLanguage: {
+      borderWidth: 2,
+      borderColor: selectedTheme.buttonBackground,
     },
     languageButtonText: {
-      color: selectedTheme.buttonText,
+      color: selectedTheme.text,
       fontSize: 16,
-      fontWeight: 'bold',
+      borderWidth: 2,
+      borderColor: selectedTheme.buttonBackground,
     },
     treeButton: {
       position: 'absolute',
@@ -284,3 +282,5 @@ export const getThemeStyles = (themeIndex) => {
 export const getThemeColors = (themeIndex) => {
   return colorThemes[themeIndex];
 };
+
+

@@ -368,7 +368,7 @@ export default function App() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{getTranslation(currentLanguage, 'chooseLanguage')}</Text>
+            <Text style={styles.modalTitle}>{getTranslation(currentLanguage, 'Language')}</Text>
             <View style={styles.languageListContainer}>
               {getAvailableLanguages().map((lang) => (
                 <TouchableOpacity
@@ -377,9 +377,11 @@ export default function App() {
                     setCurrentLanguage(lang);
                     setLanguageModalVisible(false);
                   }}
-                  style={styles.languageButton}
+                  style={[styles.languageButton,
+                    lang === currentLanguage && styles.selectedLanguage
+                  ]}
                 >
-                  <Text style={styles.buttonText}>{lang.toUpperCase()}</Text>
+                  <Text style={styles.languageButton}>{lang.toUpperCase()}</Text>
                 </TouchableOpacity>
               ))}
             </View>
