@@ -222,7 +222,7 @@ export default function App() {
         <Text style={styles.setterLabel}>{getTranslation(currentLanguage, 'setDuration')}</Text>
         <TextInput
           style={styles.input}
-          placeholder={getTranslation(currentLanguage, 'Enter Minutes')}
+          placeholder={getTranslation(currentLanguage, 'enterMinutes')}
           keyboardType="numeric"
           value={inputDuration}
           onChangeText={setInputDuration}
