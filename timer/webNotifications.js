@@ -83,9 +83,9 @@ export const sendWebNotificationNoisy = (message, language) => {
     if (Notification.permission === "granted") {
       new Notification(message, {
         body: getTranslation(language, "lookAway"), // Dynamic body text
-        icon: "https://i.pinimg.com/736x/55/c3/97/55c39703ef11466669e8c734030bd7f9.jpg",
+        icon: "https://drive.google.com/file/d/1ljG37NbC6Sr_GtmtTn1NVtiDGBmslkwK/view?usp=sharing",
       });
-      const audio = new Audio("harp_lightcurve-[AudioTrimmer.com].mp3");
+      const audio = new Audio("352650__foolboymedia__piano-notification-4.mp3");
       audio.play().catch((audioError) => {
         console.error("Error playing audio:", audioError);
       });
@@ -94,9 +94,9 @@ export const sendWebNotificationNoisy = (message, language) => {
         if (permission === "granted") {
           new Notification(message, {
             body: getTranslation(language, "lookAway"), // Dynamic body text
-            icon: "https://i.pinimg.com/736x/55/c3/97/55c39703ef11466669e8c734030bd7f9.jpg",
+            icon: "https://drive.google.com/file/d/1ljG37NbC6Sr_GtmtTn1NVtiDGBmslkwK/view?usp=sharing",
           });
-          const audio = new Audio("harp_lightcurve-[AudioTrimmer.com].mp3");
+          const audio = new Audio("352650__foolboymedia__piano-notification-4.mp3");
           audio.play().catch((audioError) => {
             console.error("Error playing audio:", audioError);
           });
