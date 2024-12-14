@@ -1,6 +1,9 @@
+// Core imports for React Native functionality
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, TextInput, ScrollView, Modal, Platform } from 'react-native';
+
+// Custom utility imports
 import { startTimer, pauseTimer, exitTimer, formatTime } from './timer.js';
 import { Ionicons } from '@expo/vector-icons';
 import { colorThemes, getThemeStyles, getThemeColors } from './style.js';
@@ -9,95 +12,148 @@ import TreeProgress from './TreeProgress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
-  const [timeRemaining, setTimeRemaining] = useState(1200);  // State for time remaining
-  const [isRunning, setIsRunning] = useState(false);  // State for timer running
-  const [intervalId, setIntervalId] = useState(null); // State for interval ID
-  const [hasPermission, setHasPermission] = useState(false);  // State for permission
-  const [notificationSent, setNotificationSent] = useState(false); // State for notification sent
-  const [inputDuration, setInputDuration] = useState(''); // State for input
-  const [timerDuration, setTimerDuration] = useState(1200); // State for timer duration
-  const [isPaused, setIsPaused] = useState(false); // State for pause
-  const [loudNotificationsEnabled, setLoudNotificationsEnabled] = useState(false); // New state for loud notifications
-  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
-  const [deviceType, setDeviceType] = useState(''); // State for device type
-  const [currentLanguage, setCurrentLanguage] = useState('en'); // Default language
+  // ============= STATE MANAGEMENT =============
+  
+  // Timer Core States
+  const [timeRemaining, setTimeRemaining] = useState(1200);  // 20 minutes in seconds
+  const [isRunning, setIsRunning] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
+  
+  // Timer Configuration States
+  const [inputDuration, setInputDuration] = useState('');
+  const [timerDuration, setTimerDuration] = useState(1200);
+  
+  // Notification States
+  const [hasPermission, setHasPermission] = useState(false);
+  const [notificationSent, setNotificationSent] = useState(false);
+  const [loudNotificationsEnabled, setLoudNotificationsEnabled] = useState(false);
+  
+  // UI States
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deviceType, setDeviceType] = useState('');
+  const [currentLanguage, setCurrentLanguage] = useState('en');
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
+  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [themeIndex, setThemeIndex] = useState(2);
+  
+  // Progress Tracking States
+  const [completedSessions, setCompletedSessions] = useState(0);
+  const [showTreeProgress, setShowTreeProgress] = useState(false);
+
+  // ============= NOTIFICATION SETUP =============
+  
+  // Initialize notification module with default empty functions
   const [notificationModule, setNotificationModule] = useState({
     initialize: () => {},
     sendNotification: () => {},
     sendNoisyNotification: () => {},
     sendAfterNotification: () => {}
   });
-  const [settingsModalVisible, setSettingsModalVisible] = useState(false);
-  const [themeIndex, setThemeIndex] = useState(2); // Starting with dark mode (index 4)
-  const [completedSessions, setCompletedSessions] = useState(0);
-  const [showTreeProgress, setShowTreeProgress] = useState(false);
+
+  // Handler for completing a session
   const handleSessionComplete = () => {
     setCompletedSessions(prev => prev + 1);
   };
 
-  // Initialize notifications based on platform
+  // ============= EFFECTS =============
+
+  // Platform-specific notification initialization
   useEffect(() => {
     let initializeNotifications, sendNotification, sendNoisyNotification, sendAfterNotification;
 
+    // Determine platform and load appropriate notification module
     if (Platform.OS === 'ios') {
       setDeviceType('iOS');
-      ({ initializeIOSNotifications: initializeNotifications, sendIOSNotification: sendNotification, sendIOSNotificationNoisy: sendNoisyNotification, sendIOSNotification: sendAfterNotification } = require('./iosNotifications'));
+      ({ 
+        initializeIOSNotifications: initializeNotifications, 
+        sendIOSNotification: sendNotification, 
+        sendIOSNotificationNoisy: sendNoisyNotification, 
+        sendIOSNotification: sendAfterNotification 
+      } = require('./iosNotifications'));
     } else if (Platform.OS === 'android') {
       setDeviceType('Android');
-      ({ initializeAndroidNotifications: initializeNotifications, sendAndroidNotification: sendNotification, sendAndroidNotificationNoisy: sendNoisyNotification, sendAndroidNotification: sendAfterNotification } = require('./androidNotifications'));
+      ({ 
+        initializeAndroidNotifications: initializeNotifications,
+        sendAndroidNotification: sendNotification,
+        sendAndroidNotificationNoisy: sendNoisyNotification,
+        sendAndroidNotification: sendAfterNotification 
+      } = require('./androidNotifications'));
     } else {
       setDeviceType('Web');
-      ({ initializeWebNotifications: initializeNotifications, sendWebNotification: sendNotification, sendWebNotificationNoisy: sendNoisyNotification, sendWebAfterNotification: sendAfterNotification } = require('./webNotifications'));
+      ({ 
+        initializeWebNotifications: initializeNotifications,
+        sendWebNotification: sendNotification,
+        sendWebNotificationNoisy: sendNoisyNotification,
+        sendWebAfterNotification: sendAfterNotification 
+      } = require('./webNotifications'));
     }
 
+    // Configure notification module with language support
     setNotificationModule({
-      initialize: (lang) => initializeNotifications(lang), // Pass language to initialization
-      sendNotification: (msg) => sendNotification(msg, currentLanguage), // Pass current language
-      sendNoisyNotification: (msg) => sendNoisyNotification(msg, currentLanguage), // Pass current language
-      sendAfterNotification: (msg) => sendAfterNotification(msg, currentLanguage), // Pass current language
+      initialize: (lang) => initializeNotifications(lang),
+      sendNotification: (msg) => sendNotification(msg, currentLanguage),
+      sendNoisyNotification: (msg) => sendNoisyNotification(msg, currentLanguage),
+      sendAfterNotification: (msg) => sendAfterNotification(msg, currentLanguage),
     });    
 
+    // Initialize notifications and check permissions
     initializeNotifications(currentLanguage).then(granted => {
       setHasPermission(granted);
     });
 
+    // Cleanup interval on unmount
     return () => clearInterval(intervalId); 
   }, [intervalId]);
 
+  // Timer completion handler
   useEffect(() => {
     if (timeRemaining === 0 && !notificationSent) {
       handleSessionComplete();
-      const message = `${Math.floor(timerDuration / 60)} ${getTranslation(currentLanguage, 'minutes')} ${timerDuration % 60} ${getTranslation(currentLanguage, 'seconds')} ${getTranslation(currentLanguage, 'completed')}`;
       
+      // Construct completion message
+      const message = `${Math.floor(timerDuration / 60)} ${getTranslation(currentLanguage, 'minutes')} 
+        ${timerDuration % 60} ${getTranslation(currentLanguage, 'seconds')} 
+        ${getTranslation(currentLanguage, 'completed')}`;
+      
+      // Send appropriate notification based on settings
       if (loudNotificationsEnabled) {
         notificationModule.sendNoisyNotification(message, currentLanguage);
         setTimeout(() => {
-          notificationModule.sendNoisyNotification(getTranslation(currentLanguage, 'goodToGo'), currentLanguage);
+          notificationModule.sendNoisyNotification(
+            getTranslation(currentLanguage, 'goodToGo'), 
+            currentLanguage
+          );
         }, 20000);
       } else {
         notificationModule.sendNotification(message, currentLanguage);
         setTimeout(() => {
-          notificationModule.sendAfterNotification(getTranslation(currentLanguage, 'goodToGo'), currentLanguage);
+          notificationModule.sendAfterNotification(
+            getTranslation(currentLanguage, 'goodToGo'), 
+            currentLanguage
+          );
         }, 20000);
       }      
 
+      // Reset states
       setNotificationSent(true);
-      setTimeRemaining(timerDuration); // Reset timeRemaining to timer duration for screen display
-
-      // Reset notificationSent to allow notifications in the next cycle
+      setTimeRemaining(timerDuration);
+      
+      // Reset notification flag after delay
       setTimeout(() => {
         setNotificationSent(false);
-      }, 1000); // Small delay to reset notificationSent
+      }, 1000);
     }
   }, [timeRemaining, notificationSent, timerDuration, loudNotificationsEnabled, notificationModule]);
 
+  // Language change handler
   useEffect(() => {
     if (notificationModule.initialize) {
-      notificationModule.initialize(currentLanguage); // Reinitialize notifications with the new language
+      notificationModule.initialize(currentLanguage);
     }
   }, [currentLanguage, notificationModule]);  
 
+  // Load saved sessions from storage
   useEffect(() => {
     const loadSessions = async () => {
       try {
@@ -112,6 +168,7 @@ export default function App() {
     loadSessions();
   }, []);
   
+  // Save sessions to storage
   useEffect(() => {
     const saveSessions = async () => {
       try {
@@ -123,18 +180,33 @@ export default function App() {
     saveSessions();
   }, [completedSessions]);
 
+  // ============= EVENT HANDLERS =============
+
+  // Timer control handlers
   const handleStartPause = () => {
     if (isRunning) {
-      // Pause functionality
       pauseTimer(setIsRunning, intervalId);
       setIsPaused(true);
     } else {
-      // Start functionality
       setNotificationSent(false);
       if (!isPaused) {
-        startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timerDuration);
+        startTimer(
+          setHasPermission, 
+          setIsRunning, 
+          setIntervalId, 
+          setTimeRemaining, 
+          isRunning, 
+          timerDuration
+        );
       } else {
-        startTimer(setHasPermission, setIsRunning, setIntervalId, setTimeRemaining, isRunning, timeRemaining);
+        startTimer(
+          setHasPermission, 
+          setIsRunning, 
+          setIntervalId, 
+          setTimeRemaining, 
+          isRunning, 
+          timeRemaining
+        );
       }
       setIsPaused(false);
     }
@@ -148,12 +220,13 @@ export default function App() {
   const handleSetDuration = () => {
     const newDuration = (parseInt(inputDuration, 10)) * 60;
     if (!isNaN(newDuration) && newDuration > 0) {
-      setTimerDuration(newDuration); // Update State
-      setTimeRemaining(newDuration); // Reset time remaining
-      setInputDuration(''); // Clear input after setting duration
+      setTimerDuration(newDuration);
+      setTimeRemaining(newDuration);
+      setInputDuration('');
     }
   };
 
+  // UI control handlers
   const toggleLoudNotifications = () => {
     setLoudNotificationsEnabled(prev => !prev);
   };
@@ -167,59 +240,99 @@ export default function App() {
     setSettingsModalVisible(false);
   };
 
-  // Get current styles and colors based on theme
+  // Apply theme styling
   const styles = getThemeStyles(themeIndex);
   const colors = getThemeColors(themeIndex);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Settings Button */}
+      {/* =================
+          Header Controls 
+          ================= */}
+      {/* Settings gear icon button */}
       <TouchableOpacity 
         style={styles.settingsButton}
         onPress={() => setSettingsModalVisible(true)}
-        >
-        <Ionicons name="settings-outline" size={24} color={styles.buttonText.color} />
+      >
+        <Ionicons 
+          name="settings-outline" 
+          size={24} 
+          color={styles.buttonText.color} 
+        />
       </TouchableOpacity>
-
-      {/* Tree Progress Button */}
+  
+      {/* Tree progress button - Android only */}
       {deviceType === 'Android' && (
         <TouchableOpacity 
-        style={styles.treeButton}
-        onPress={() => setShowTreeProgress(true)}
+          style={styles.treeButton}
+          onPress={() => setShowTreeProgress(true)}
         >
-        <Ionicons name="leaf-outline" size={24} color={styles.buttonText.color} />
-      </TouchableOpacity>
+          <Ionicons 
+            name="leaf-outline" 
+            size={24} 
+            color={styles.buttonText.color} 
+          />
+        </TouchableOpacity>
       )}
-
-      {/* Title */}
-      <Text style={styles.titleText}>{getTranslation(currentLanguage, 'timerTitle')}</Text>
+  
+      {/* =================
+          Main Timer UI 
+          ================= */}
+      {/* Timer title */}
+      <Text style={styles.titleText}>
+        {getTranslation(currentLanguage, 'timerTitle')}
+      </Text>
       
-      {/* Timer Display */}
+      {/* Timer display with remaining time */}
       <View style={styles.timerContainer}>
-        <Text style={styles.timerLabel}>{getTranslation(currentLanguage, 'timeRemaining')}:</Text>
-        <Text style={styles.timeDisplay}>{formatTime(timeRemaining)}</Text>
+        <Text style={styles.timerLabel}>
+          {getTranslation(currentLanguage, 'timeRemaining')}:
+        </Text>
+        <Text style={styles.timeDisplay}>
+          {formatTime(timeRemaining)}
+        </Text>
       </View>
       
       {/* Notification Permission Warning */}
       {!hasPermission && (
-        <Text style={styles.permissionText}>{getTranslation(currentLanguage, 'permissionWarning')}</Text>
+        <Text style={styles.permissionText}>
+          {getTranslation(currentLanguage, 'permissionWarning')}
+        </Text>
       )}
       
-      {/* Main Control Buttons */}
+      {/* =================
+          Timer Controls 
+          ================= */}
+      {/* Start/Pause and Reset buttons */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleStartPause} style={styles.button}>
+        <TouchableOpacity 
+          onPress={handleStartPause} 
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>
-            {isRunning ? getTranslation(currentLanguage, 'pause') : getTranslation(currentLanguage, 'start')}
+            {isRunning 
+              ? getTranslation(currentLanguage, 'pause') 
+              : getTranslation(currentLanguage, 'start')}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => exitTimer(setIsRunning, setTimeRemaining, setIntervalId, intervalId)} style={[styles.button, styles.exitButton]}>
-          <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'reset')}</Text>
+        <TouchableOpacity 
+          onPress={() => exitTimer(setIsRunning, setTimeRemaining, setIntervalId, intervalId)} 
+          style={[styles.button, styles.exitButton]}
+        >
+          <Text style={styles.buttonText}>
+            {getTranslation(currentLanguage, 'reset')}
+          </Text>
         </TouchableOpacity>
       </View>
-
-      {/* Timer Duration Setter */}
+  
+      {/* =================
+          Timer Duration Settings 
+          ================= */}
+      {/* Duration input and set button */}
       <View style={styles.setterContainer}>
-        <Text style={styles.setterLabel}>{getTranslation(currentLanguage, 'setDuration')}</Text>
+        <Text style={styles.setterLabel}>
+          {getTranslation(currentLanguage, 'setDuration')}
+        </Text>
         <TextInput
           style={styles.input}
           placeholder={getTranslation(currentLanguage, 'enterMinutes')}
@@ -228,16 +341,32 @@ export default function App() {
           onChangeText={setInputDuration}
           onSubmitEditing={handleSetDuration}
         />
-        <TouchableOpacity onPress={handleSetDuration} style={styles.setButton}>
-          <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'set')}</Text>
+        <TouchableOpacity 
+          onPress={handleSetDuration} 
+          style={styles.setButton}
+        >
+          <Text style={styles.buttonText}>
+            {getTranslation(currentLanguage, 'set')}
+          </Text>
         </TouchableOpacity>
       </View>
-
-      {/* Notification Settings */}
+  
+      {/* =================
+          Web-specific Controls 
+          ================= */}
+      {/* Notification settings - Web only */}
       {deviceType === 'Web' && (
         <View style={styles.notificationContainer}>
-          <Text style={styles.notificationLabel}>{getTranslation(currentLanguage, 'notificationSettings')}:</Text>
-          <TouchableOpacity onPress={toggleLoudNotifications} style={[styles.button, loudNotificationsEnabled ? styles.loudButton : styles.quietButton]}>
+          <Text style={styles.notificationLabel}>
+            {getTranslation(currentLanguage, 'notificationSettings')}:
+          </Text>
+          <TouchableOpacity 
+            onPress={toggleLoudNotifications} 
+            style={[
+              styles.button, 
+              loudNotificationsEnabled ? styles.loudButton : styles.quietButton
+            ]}
+          >
             <Text style={styles.buttonText}>
               {loudNotificationsEnabled
                 ? getTranslation(currentLanguage, 'loudOn')
@@ -246,16 +375,24 @@ export default function App() {
           </TouchableOpacity>
         </View>
       )}
-
-      {/* About Section */}
-      <TouchableOpacity onPress={toggleModal} style={styles.aboutButton}>
-        <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'about')}</Text>
+  
+      {/* About button */}
+      <TouchableOpacity 
+        onPress={toggleModal} 
+        style={styles.aboutButton}
+      >
+        <Text style={styles.buttonText}>
+          {getTranslation(currentLanguage, 'about')}
+        </Text>
       </TouchableOpacity>
-
-      {/* Tree Progress Web */}
-      {deviceType === 'Web' &&(
+  
+      {/* =================
+          Progress Tracking 
+          ================= */}
+      {/* Tree progress component - Web only */}
+      {deviceType === 'Web' && (
         <View style={styles.treeContainer}>
-         <TreeProgress 
+          <TreeProgress 
             completedSessions={completedSessions}
             onClose={() => setShowTreeProgress(false)}
             colors={colors}
@@ -264,8 +401,11 @@ export default function App() {
           /> 
         </View>
       )}
-
-      {/* Tree Progress Modal */}
+  
+      {/* =================
+          Modals 
+          ================= */}
+      {/* Tree Progress Modal - Android only */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -282,8 +422,8 @@ export default function App() {
           />
         </View>
       </Modal>
-
-      {/* Modal for 20/20/20 Rule Information */}
+  
+      {/* 20/20/20 Rule Information Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -292,13 +432,28 @@ export default function App() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{getTranslation(currentLanguage, 'ruleTitle')}</Text>
-            <Text style={styles.modalText}>{getTranslation(currentLanguage, 'ruleDescription')}</Text>
-            <Text style={styles.modalText}>{getTranslation(currentLanguage, 'ruleStep1')}</Text>
-            <Text style={styles.modalText}>{getTranslation(currentLanguage, 'ruleStep2')}</Text>
-            <Text style={styles.modalText}>{getTranslation(currentLanguage, 'ruleStep3')}</Text>
-            <Text style={styles.modalText}>{getTranslation(currentLanguage, 'ruleFooter')}</Text>
-            <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
+            <Text style={styles.modalTitle}>
+              {getTranslation(currentLanguage, 'ruleTitle')}
+            </Text>
+            <Text style={styles.modalText}>
+              {getTranslation(currentLanguage, 'ruleDescription')}
+            </Text>
+            <Text style={styles.modalText}>
+              {getTranslation(currentLanguage, 'ruleStep1')}
+            </Text>
+            <Text style={styles.modalText}>
+              {getTranslation(currentLanguage, 'ruleStep2')}
+            </Text>
+            <Text style={styles.modalText}>
+              {getTranslation(currentLanguage, 'ruleStep3')}
+            </Text>
+            <Text style={styles.modalText}>
+              {getTranslation(currentLanguage, 'ruleFooter')}
+            </Text>
+            <TouchableOpacity 
+              onPress={toggleModal} 
+              style={styles.closeButton}
+            >
               <Text style={styles.buttonText}>Close</Text>
             </TouchableOpacity>
           </View>
@@ -314,9 +469,14 @@ export default function App() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{getTranslation(currentLanguage, 'settings')}</Text>
+            <Text style={styles.modalTitle}>
+              {getTranslation(currentLanguage, 'settings')}
+            </Text>
+            {/* Theme selection list */}
             <View style={styles.themeListContainer}>
-              <Text style={styles.modalText}>{getTranslation(currentLanguage, 'chooseTheme')}</Text>
+              <Text style={styles.modalText}>
+                {getTranslation(currentLanguage, 'chooseTheme')}
+              </Text>
               {colorThemes.map((theme, index) => (
                 <TouchableOpacity
                   key={index}
@@ -333,7 +493,10 @@ export default function App() {
                     ]}
                   />
                   <Text style={styles.themeOptionText}>
-                    {getTranslation(currentLanguage, `theme_${theme.name.toLowerCase().replace(/\s+/g, '_')}`)}
+                    {getTranslation(
+                      currentLanguage, 
+                      `theme_${theme.name.toLowerCase().replace(/\s+/g, '_')}`
+                    )}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -343,17 +506,21 @@ export default function App() {
               onPress={() => setSettingsModalVisible(false)} 
               style={styles.closeButton}
             >
-              <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'close')}</Text>
+              <Text style={styles.buttonText}>
+                {getTranslation(currentLanguage, 'close')}
+              </Text>
             </TouchableOpacity>
 
-            {/* Language Selection Button */}
+            {/* Language selection button - Web only */}
             {Platform.OS === 'web' && (
-            <TouchableOpacity 
-              onPress={() => setLanguageModalVisible(true)} 
-              style={styles.settingsButton}
-            >
-              <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'Language')}</Text>
-            </TouchableOpacity>
+              <TouchableOpacity 
+                onPress={() => setLanguageModalVisible(true)} 
+                style={styles.settingsButton}
+              >
+                <Text style={styles.buttonText}>
+                  {getTranslation(currentLanguage, 'Language')}
+                </Text>
+              </TouchableOpacity>
             )}
           </View>
         </View>
@@ -368,7 +535,9 @@ export default function App() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{getTranslation(currentLanguage, 'Language')}</Text>
+            <Text style={styles.modalTitle}>
+              {getTranslation(currentLanguage, 'Language')}
+            </Text>
             <View style={styles.languageListContainer}>
               {getAvailableLanguages().map((lang) => (
                 <TouchableOpacity
@@ -377,11 +546,14 @@ export default function App() {
                     setCurrentLanguage(lang);
                     setLanguageModalVisible(false);
                   }}
-                  style={[styles.languageButton,
+                  style={[
+                    styles.languageButton,
                     lang === currentLanguage && styles.selectedLanguage
                   ]}
                 >
-                  <Text style={styles.languageButton}>{lang.toUpperCase()}</Text>
+                  <Text style={styles.languageButton}>
+                    {lang.toUpperCase()}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -389,7 +561,9 @@ export default function App() {
               onPress={() => setLanguageModalVisible(false)} 
               style={styles.closeButton}
             >
-              <Text style={styles.buttonText}>{getTranslation(currentLanguage, 'close')}</Text>
+              <Text style={styles.buttonText}>
+                {getTranslation(currentLanguage, 'close')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
