@@ -18,3 +18,6 @@ Thank you to:
 - https://freesound.org/people/FoolBoyMedia/sounds/352650/
 - https://docs.expo.dev/distribution/publishing-websites/
 - https://docs.expo.dev/tutorial/create-your-first-app/
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now
+- https://docs.expo.dev/versions/latest/sdk/notifications/#
+- https://docs.expo.dev/build-reference/simulators/
