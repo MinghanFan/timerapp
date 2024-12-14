@@ -3,6 +3,14 @@ import { View, Text, TouchableOpacity, Dimensions, Alert, Platform } from 'react
 import Svg, { Path, G, Circle, Ellipse } from 'react-native-svg';
 import { getTranslation } from './language';
 
+/**
+ * TreeSVG Component:
+ * Renders different stages of a tree based on the current stage.
+ * Each stage has a unique SVG representation.
+ *
+ * Props:
+ * - stage (number): The current stage of tree growth.
+ */
 const TreeSVG = ({ stage }) => {
   const treeStages = {
     0: {
@@ -150,6 +158,18 @@ const TreeSVG = ({ stage }) => {
   );
 };
 
+/**
+ * TreeProgress Component:
+ * Displays tree growth progress based on completed sessions.
+ *
+ * Props:
+ * - completedSessions (number): Total number of completed sessions.
+ * - onClose (function): Function to close the progress view.
+ * - style (object): Custom styles for the component.
+ * - colors (object): Theme colors for the component.
+ * - onReset (function): Function to reset progress.
+ * - language (string): Current language for translations.
+ */
 const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, language }) => {
   const isWeb = Platform.OS === 'web';
   
@@ -168,10 +188,9 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, 
   };
 
   const config = isWeb ? platformConfig.web : platformConfig.mobile;
-  
-  const currentStage = Math.min(Math.floor(completedSessions/config.sessionsPerStage), config.maxStage);
-  
-  // Full set of labels, mobile will only use 0-5
+  const currentStage = Math.min(Math.floor(completedSessions / config.sessionsPerStage), config.maxStage);
+
+  // Labels for tree growth stages
   const stageLabels = [
     getTranslation(language, 'plantSeed'),
     getTranslation(language, 'seedSprouting'),
@@ -185,6 +204,9 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, 
     getTranslation(language, 'majesticTree')
   ];  
 
+  /**
+   * Handles the reset action with confirmation.
+   */
   const handleReset = () => {
     Alert.alert(
       getTranslation(language, 'resetProgress'),
@@ -205,10 +227,12 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, 
       width: Dimensions.get('window').width * 0.9,
       maxHeight: Dimensions.get('window').height * 0.8,
     }, style]}>
+      {/* Tree SVG Display */}
       <View style={{ marginBottom: 30, width: 120, height: 150, alignItems: 'center', justifyContent: 'center' }}>
         <TreeSVG stage={currentStage} />
       </View>
-      
+
+      {/* Progress Information */}
       <View style={{ alignItems: 'center', marginBottom: 20 }}>
         <Text style={{ fontSize: 24, fontWeight: 'bold', color: colors.text, marginBottom: 10 }}>
           {getTranslation(language, 'progressTree')}
@@ -220,18 +244,20 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, 
           {`${getTranslation(language, 'completedSessions')}: ${completedSessions}`}
         </Text>
       </View>
-      
+
+      {/* Progress Bar */}
       <View style={{ width: '100%', height: 8, backgroundColor: '#E0E0E0', borderRadius: 4, marginBottom: 20 }}>
         <View 
           style={{
-            width: `${Math.min((completedSessions/config.totalSessions) * 100, 100)}%`,
+            width: `${Math.min((completedSessions / config.totalSessions) * 100, 100)}%`,
             height: '100%',
             backgroundColor: '#4CAF50',
             borderRadius: 4,
           }}
         />
       </View>
-      
+
+      {/* Buttons */}
       <View style={[
         { 
           width: '100%',
@@ -240,22 +266,21 @@ const TreeProgress = ({ completedSessions = 0, onClose, style, colors, onReset, 
         },
         isWeb ? { justifyContent: 'center' } : { justifyContent: 'space-between' }
       ]}>
-
-        {!isWeb &&(
-        <TouchableOpacity 
-          onPress={onClose}
-          style={{
-            paddingVertical: 12,
-            paddingHorizontal: 20,
-            backgroundColor: colors.buttonBackground,
-            borderRadius: 25,
-            marginBottom: 10,
-          }}
-        >
-          <Text style={{ color: colors.buttonText, fontSize: 16, fontWeight: 'bold' }}>
-            {getTranslation(language, 'backToTimer')}
-          </Text>
-        </TouchableOpacity>
+        {!isWeb && (
+          <TouchableOpacity
+            onPress={onClose}
+            style={{
+              paddingVertical: 12,
+              paddingHorizontal: 20,
+              backgroundColor: colors.buttonBackground,
+              borderRadius: 25,
+              marginBottom: 10,
+            }}
+          >
+            <Text style={{ color: colors.buttonText, fontSize: 16, fontWeight: 'bold' }}>
+              {getTranslation(language, 'backToTimer')}
+            </Text>
+          </TouchableOpacity>
         )}
 
         {!isWeb && (
