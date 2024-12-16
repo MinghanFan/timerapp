@@ -9,7 +9,7 @@ Our project runs using the React Native framework. To run our program locally, y
 
 Our program is run by the App.js file, which runs the timer, builds the app, and calls all the rest of the code. Notifications are called from Notifications.js, which then checks the operating system and passes the calls onto specific notification.s files whatever platform the program is running on. The special features of the progress tree and language module have their own files as well, which are accessed through App.js.
 
-Once in our App, you can engage in several ways to customize your experience. If for some reason you need a time interval greater or less than 20 you can customize through the set duration button. There is a settings button which allows you to choose a color theme of your liking from a series of preset options. There are also buttons with options for each of our available languages: English, Spanish, and Chinese. To see the progress tree, the user can click the leaf button.
+Once in our App, you can engage in several ways to customize your experience. If for some reason you need a time interval greater or less than 20 you can customize through the set duration button. There is a settings button which allows you to choose a color theme of your liking from a series of preset options. There are also buttons with options for each of our available languages: English, Spanish, and Mandarin. To see the progress tree, the user can click the leaf button.
 
 ### Acknowledgements
 
