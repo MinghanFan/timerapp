@@ -518,7 +518,7 @@ export default function App() {
                 style={styles.settingsButton}
               >
                 <Text style={styles.buttonText}>
-                  {getTranslation(currentLanguage, 'Language')}
+                  {getTranslation(currentLanguage, 'changeLanguage')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -536,7 +536,7 @@ export default function App() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>
-              {getTranslation(currentLanguage, 'Language')}
+              {getTranslation(currentLanguage, 'chooseLanguage')}
             </Text>
             <View style={styles.languageListContainer}>
               {getAvailableLanguages().map((lang) => (
